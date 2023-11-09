@@ -135,7 +135,7 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                     linearLayoutComplete = dialog.findViewById(R.id.linearLayoutComplete);
                     tvEmail = dialog.findViewById(R.id.tvEmail);
 
-                    tvEmail.setText("Email :" + FeedbackAdminHelper.getEmail());
+                    tvEmail.setText(FeedbackAdminHelper.getEmail());
 
                     linearLayoutEmail.setOnClickListener(new View.OnClickListener()
                     {
