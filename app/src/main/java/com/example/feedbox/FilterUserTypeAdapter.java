@@ -2,6 +2,7 @@ package com.example.feedbox;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +21,22 @@ public class FilterUserTypeAdapter extends RecyclerView.Adapter<FilterUserTypeAd
     Context context;
     private List<FilterUserTypeHelper> mFilterUserType;
 
-    public FilterUserTypeAdapter(List<FilterUserTypeHelper> FilterCategorys, Context context2)
+    public FilterUserTypeAdapter(List<FilterUserTypeHelper> FilterUserType, Context context2)
     {
-        mFilterUserType = FilterCategorys;
+        mFilterUserType = FilterUserType;
         context = context2;
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onBindViewHolder(FilterCategoryAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(FilterUserTypeAdapter.ViewHolder holder, int position)
     {
         FilterUserTypeHelper FilterUserTypeHelper = mFilterUserType.get(position);
 
 //        complaintActivity = new ComplaintActivity().getInstance();
 
         userTypeActivity = new UserActivity().getInstance();
-        holder.tvCategoryName.setText(FilterUserTypeHelper.getUserType());
+        holder.tvUserType.setText(FilterUserTypeHelper.getUserType());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener()
         {
@@ -44,16 +45,14 @@ public class FilterUserTypeAdapter extends RecyclerView.Adapter<FilterUserTypeAd
             {
                 try
                 {
-
-                    complaintActivity.Category = FilterUserTypeHelper.UserType;
-                    complaintActivity.LoadFeedback();
-                    complaintActivity.getDialog().dismiss();
-
-
+                    Log.d("daw", "onClick: " + FilterUserTypeHelper.getUserType());
+                    userTypeActivity.UserType = FilterUserTypeHelper.getUserType();
+                    userTypeActivity.LoadUser();
+                    userTypeActivity.getDialog().dismiss();
                 }
                 catch (Exception err)
                 {
-                    holder.tvCategoryName.setText(err.getMessage());
+                    holder.tvUserType.setText(err.getMessage());
                 }
             }
         });
@@ -82,14 +81,10 @@ public class FilterUserTypeAdapter extends RecyclerView.Adapter<FilterUserTypeAd
         return viewHolder;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView tvCategoryName;
+        TextView tvUserType;
 
         LinearLayout linearLayout;
 
@@ -97,7 +92,7 @@ public class FilterUserTypeAdapter extends RecyclerView.Adapter<FilterUserTypeAd
             super(itemView);
 
             linearLayout = itemView.findViewById(R.id.linearLayout);
-            tvCategoryName = itemView.findViewById(R.id.tvCategoryName);
+            tvUserType = itemView.findViewById(R.id.tvCategoryName);
         }
     }
 }

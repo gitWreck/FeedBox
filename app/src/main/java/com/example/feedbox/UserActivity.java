@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -42,8 +43,8 @@ public class UserActivity extends AppCompatActivity {
     UserAdapter userAdapter;
 
     RecyclerView recyclerView;
-
     LinearLayout linearLayoutBack, linearLayoutFilter;
+    public String UserType = "All";
     CardView cardViewAdd;
 
     Dialog dialog;
@@ -51,11 +52,15 @@ public class UserActivity extends AppCompatActivity {
     public static UserActivity getInstance() {
         return userActivity;
     }
-
+    public Dialog getDialog() {
+        return dialog;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity);
+
+        userActivity = this;
 
         userHelpers = new ArrayList<>();
 
@@ -98,23 +103,23 @@ public class UserActivity extends AppCompatActivity {
 
                 window.setAttributes(wlp);
 
-                List<FilterCategoryHelper> filterCategoryHelpers;
-                FilterCategoryAdapter filterCategoryAdapter;
+                List<FilterUserTypeHelper> filterUserTypeHelpers;
+                FilterUserTypeAdapter filterUserTypeAdapter;
                 RecyclerView recyclerView;
 
                 recyclerView = dialog.findViewById(R.id.recyclerView);
 
-                filterCategoryHelpers = new ArrayList<>();
+                filterUserTypeHelpers = new ArrayList<>();
 
                 recyclerView.setHasFixedSize(true);
 
-                filterCategoryAdapter = new FilterCategoryAdapter(filterCategoryHelpers, UserActivity.this);
+                filterUserTypeAdapter = new FilterUserTypeAdapter(filterUserTypeHelpers, UserActivity.this);
 
                 LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
                 recyclerView.setLayoutManager(linearLayoutManager2);
 
-                filterCategoryHelpers.add(new FilterCategoryHelper("All"));
-                recyclerView.setAdapter(filterCategoryAdapter);
+                filterUserTypeHelpers.add(new FilterUserTypeHelper("All"));
+                recyclerView.setAdapter(filterUserTypeAdapter);
 
                 //CATEGORY
                 {
@@ -139,7 +144,7 @@ public class UserActivity extends AppCompatActivity {
 
                                             String userType = jsonObjectData.getString("user_type");
 
-                                            filterCategoryHelpers.add(new FilterCategoryHelper(userType));
+                                            filterUserTypeHelpers.add(new FilterUserTypeHelper(userType));
                                         }
 
                                         catch (Exception err)
@@ -148,7 +153,7 @@ public class UserActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    recyclerView.setAdapter(filterCategoryAdapter);
+                                    recyclerView.setAdapter(filterUserTypeAdapter);
                                 }
 
                             } catch (Exception e) {
@@ -173,6 +178,7 @@ public class UserActivity extends AppCompatActivity {
                         {
                             Map<String, String> params = new HashMap<String, String>();
                             //params.put("email", Email);
+                            params.put("user_type", UserType);
                             return params;
                         }
                     };
@@ -194,10 +200,11 @@ public class UserActivity extends AppCompatActivity {
     {
         userHelpers.clear();
         recyclerView.setAdapter(userAdapter);
+
+        Log.d("TAG", "LoadUser: " + UserType);
+
         String url = URLDatabase.URL_USER_LIST;
-
         RequestQueue queue = Volley.newRequestQueue(UserActivity.this);
-
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -234,6 +241,9 @@ public class UserActivity extends AppCompatActivity {
                         }
 
                         recyclerView.setAdapter(userAdapter);
+                    } else {
+                        Toast.makeText(UserActivity.this, "Empty", Toast.LENGTH_SHORT).show();
+
                     }
 
                 } catch (Exception e) {
@@ -258,6 +268,7 @@ public class UserActivity extends AppCompatActivity {
             {
                 Map<String, String> params = new HashMap<String, String>();
                 //params.put("email", Email);
+                params.put("user_type", UserType);
                 return params;
             }
         };

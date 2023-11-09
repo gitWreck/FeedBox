@@ -599,6 +599,7 @@ public class HomeAdminActivity extends AppCompatActivity {
             {
                 Map<String, String> params = new HashMap<String, String>();
                 //params.put("email", Email);
+                params.put("user_type", "All");
                 return params;
             }
         };
