@@ -34,6 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvGuideline, tvFullName;
     String Slide, Email;
     CardView cardViewClickHere;
+    Boolean AllowSendFeed = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,60 +114,7 @@ public class HomeActivity extends AppCompatActivity {
         cardViewClickHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Dialog dialog = new Dialog(HomeActivity.this);
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(true);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.feedback_question);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                Window window = dialog.getWindow();
-                WindowManager.LayoutParams wlp = window.getAttributes();
-
-                wlp.gravity = Gravity.BOTTOM;
-
-                window.setAttributes(wlp);
-
-                ImageView imgLike, imgDislike;
-
-                imgLike = dialog.findViewById(R.id.imgLike);
-                imgDislike = dialog.findViewById(R.id.imgDislike);
-
-                imgLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Intent intent= new Intent(HomeActivity.this, SendFeedbackActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("Feedback", "Like");
-
-                        intent.putExtras(bundle);
-
-                        startActivity(intent);
-
-                        dialog.dismiss();
-                    }
-                });
-
-                imgDislike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Intent intent= new Intent(HomeActivity.this, SendFeedbackActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("Feedback", "Dislike");
-
-                        intent.putExtras(bundle);
-
-                        startActivity(intent);
-
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
+                CheckBlockedStatus();
             }
         });
 
@@ -286,6 +235,110 @@ public class HomeActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         );
         queue.add(request);
+    }
+
+    void CheckBlockedStatus()
+    {
+        String url = URLDatabase.URL_MUTE_CHECK_USER;
+
+        RequestQueue queue = Volley.newRequestQueue(HomeActivity.this);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.contains("BlockedMessage")) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        ToastMessage(jsonObject.getString("BlockedMessage"));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+//                    AllowSendFeed = false;
+                } else {
+                    Dialog dialog = new Dialog(HomeActivity.this);
+
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setContentView(R.layout.feedback_question);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    Window window = dialog.getWindow();
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+
+                    window.setAttributes(wlp);
+
+                    ImageView imgLike, imgDislike;
+
+                    imgLike = dialog.findViewById(R.id.imgLike);
+                    imgDislike = dialog.findViewById(R.id.imgDislike);
+
+                    imgLike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent intent = new Intent(HomeActivity.this, SendFeedbackActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("Feedback", "Like");
+
+                            intent.putExtras(bundle);
+
+                            startActivity(intent);
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    imgDislike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent intent = new Intent(HomeActivity.this, SendFeedbackActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("Feedback", "Dislike");
+
+                            intent.putExtras(bundle);
+
+                            startActivity(intent);
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(HomeActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", Email);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+        queue.add(request);
+    }
+    void ToastMessage(String loadMsg) {
+        Toast.makeText(HomeActivity.this, loadMsg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

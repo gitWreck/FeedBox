@@ -3,6 +3,9 @@ package com.example.feedbox;
 public class URLDatabase
 {
     static String URLLH = "http://192.168.1.11/feedbox/";
+
+    public static String URL_MUTE_USER = URLLH + "URL_MUTE_USER.php";
+    public static String URL_MUTE_CHECK_USER = URLLH + "URL_MUTE_CHECK_USER.php";
     public static String URL_CHECK_ACCOUNT = URLLH + "URL_CHECK_ACCOUNT.php";
     public static String URL_SEND_CODE = URLLH + "URL_SEND_CODE.php";
     public static String URL_REGISTER = URLLH + "URL_REGISTER.php";

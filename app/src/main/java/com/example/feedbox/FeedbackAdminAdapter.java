@@ -151,8 +151,8 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                             StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
+                                    Toast.makeText(context, "Email sent successfully to : " + FeedbackAdminHelper.getEmail(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                    Toast.makeText(context, "Email sent to user", Toast.LENGTH_SHORT).show();
                                 }
                             }, new com.android.volley.Response.ErrorListener() {
                                 @Override
@@ -190,6 +190,7 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                             StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
+                                    Toast.makeText(context, FeedbackAdminHelper.getEmail() + " Complaint completed", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 }
                             }, new com.android.volley.Response.ErrorListener() {

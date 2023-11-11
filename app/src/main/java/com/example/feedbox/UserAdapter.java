@@ -7,6 +7,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,7 +67,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
 {
     String[] statuses = { "Active", "Inactive" };
     Context context;
-    String Status;
+    int MuteCount;
+
+    ProgressDialog progressDialog;
     private List<UserHelper> mUser;
 
     public UserAdapter(List<UserHelper> Users, Context context2)
@@ -73,77 +77,207 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
         mUser = Users;
         context = context2;
     }
+    private void EndProgLoad(){
+        if(progressDialog!=null && progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(UserAdapter.ViewHolder holder, int position)
     {
+        MuteCount = 0;
         UserHelper UserHelper = mUser.get(position);
+        MuteCount = UserHelper.getMuteCounter();
         holder.tvFirstName.setText(UserHelper.getFirstName());
         holder.tvLastName.setText(UserHelper.getLastName());
         holder.tvEmail.setText(UserHelper.getEmail());
         holder.tvPosition.setText(UserHelper.getPosition());
-        holder.tvMuteCounter.setText(String.valueOf(UserHelper.getMuteCounter()));
-        try
-        {
+//        holder.tvMuteCounter.setText(String.valueOf(UserHelper.getMuteCounter()));
+        holder.tvMuteCounter.setText(String.valueOf(MuteCount));
+//        holder.tvMuteCounter.update
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
 
-//            holder.tvFullName.setText(UserHelper.getFullName());
-
-//            holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                @Override
-//                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                    Status = statuses[i];
-//
-//                    String url = URLDatabase.URL_USER_STATUS_EDIT;
-//
-//                    RequestQueue queue = Volley.newRequestQueue(context);
-//
-//                    StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response)
-//                        {
-//                        }
-//                    }, new com.android.volley.Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error)
-//                        {
-//                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }) {
-//                        @Override
-//                        public String getBodyContentType() {
-//                            return "application/x-www-form-urlencoded; charset=UTF-8";
-//                        }
-//
-//                        @Override
-//                        protected Map<String, String> getParams()
-//                        {
-//                            Map<String, String> params = new HashMap<String, String>();
-//                            params.put("user_id", UserHelper.getUserID());
-//                            params.put("status", Status);
-//                            return params;
-//                        }
-//                    };
-//                    queue.add(request);
-//                }
-//
-//                @Override
-//                public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                }
-//            });
-//
-//            ArrayAdapter ad = new ArrayAdapter(context, android.R.layout.simple_spinner_item, statuses);
-//
-//            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//            holder.spinner.setAdapter(ad);
-//            holder.spinner.setSelection(ad.getPosition(UserHelper.getStatus()));
-        }
-        catch (Exception err)
+        holder.imgBTNMuteUser.setOnClickListener(new View.OnClickListener()
         {
-            Toast.makeText(context, err.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onClick(View view)
+            {
+                Dialog dialog = new Dialog(context);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.mute_item_layout);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams wlp = window.getAttributes();
+
+                wlp.gravity = Gravity.BOTTOM;
+
+                window.setAttributes(wlp);
+
+                LinearLayout linearLayoutMuteUser, linearLayoutComplete;
+                TextView tvEmail;
+
+                linearLayoutMuteUser = dialog.findViewById(R.id.linearLayoutMuteUser);
+//                linearLayoutComplete = dialog.findViewById(R.id.linearLayoutComplete);
+                tvEmail = dialog.findViewById(R.id.tvMuteUser);
+
+                tvEmail.setText(UserHelper.getEmail());
+
+                linearLayoutMuteUser.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        progressDialog.setMessage("Sending...");
+                        progressDialog.show();
+                        if(MuteCount < 3) {
+                            holder.tvMuteCounter.setText(String.valueOf(++MuteCount));
+                        }
+                        Log.d("daw", "onClick: " + MuteCount);
+                        String url = URLDatabase.URL_MUTE_USER;
+
+                        RequestQueue queue = Volley.newRequestQueue(context);
+
+                        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                            }
+                        }, new com.android.volley.Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error)
+                            {
+                                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/x-www-form-urlencoded; charset=UTF-8";
+                            }
+
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("email", UserHelper.getEmail());
+//                                params.put("feedback_id", FeedbackAdminHelper.getFeedBackID());
+                                return params;
+                            }
+                        };
+                        queue.add(request);
+                        dialog.dismiss();
+                        EndProgLoad();
+                    }
+                });
+
+//                linearLayoutComplete.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        String url = URLDatabase.URL_FEEDBACK_COMPLETE;
+//
+//                        RequestQueue queue = Volley.newRequestQueue(context);
+//
+//                        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+//                            @Override
+//                            public void onResponse(String response) {
+//                                dialog.dismiss();
+//                            }
+//                        }, new com.android.volley.Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error)
+//                            {
+//                                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        }) {
+//                            @Override
+//                            public String getBodyContentType() {
+//                                return "application/x-www-form-urlencoded; charset=UTF-8";
+//                            }
+//
+//                            @Override
+//                            protected Map<String, String> getParams()
+//                            {
+//                                Map<String, String> params = new HashMap<String, String>();
+//                                params.put("email", UserHelper.getEmail());
+//                                return params;
+//                            }
+//                        };
+//                        queue.add(request);
+//                    }
+//                });
+
+                dialog.show();
+            }
+        });
+//        try
+//        {
+//
+////            holder.tvFullName.setText(UserHelper.getFullName());
+//
+////            holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+////                @Override
+////                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+////                    Status = statuses[i];
+////
+////                    String url = URLDatabase.URL_USER_STATUS_EDIT;
+////
+////                    RequestQueue queue = Volley.newRequestQueue(context);
+////
+////                    StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+////                        @Override
+////                        public void onResponse(String response)
+////                        {
+////                        }
+////                    }, new com.android.volley.Response.ErrorListener() {
+////                        @Override
+////                        public void onErrorResponse(VolleyError error)
+////                        {
+////                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+////                        }
+////                    }) {
+////                        @Override
+////                        public String getBodyContentType() {
+////                            return "application/x-www-form-urlencoded; charset=UTF-8";
+////                        }
+////
+////                        @Override
+////                        protected Map<String, String> getParams()
+////                        {
+////                            Map<String, String> params = new HashMap<String, String>();
+////                            params.put("user_id", UserHelper.getUserID());
+////                            params.put("status", Status);
+////                            return params;
+////                        }
+////                    };
+////                    queue.add(request);
+////                }
+////
+////                @Override
+////                public void onNothingSelected(AdapterView<?> adapterView) {
+////
+////                }
+////            });
+////
+////            ArrayAdapter ad = new ArrayAdapter(context, android.R.layout.simple_spinner_item, statuses);
+////
+////            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+////
+////            holder.spinner.setAdapter(ad);
+////            holder.spinner.setSelection(ad.getPosition(UserHelper.getStatus()));
+//        }
+//        catch (Exception err)
+//        {
+//            Toast.makeText(context, err.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -173,9 +307,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
     {
         TextView tvFullName, tvFirstName, tvLastName, tvEmail, tvPosition, tvMuteCounter;
         Spinner spinner;
+        ImageView imgBTNMuteUser;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            imgBTNMuteUser = itemView.findViewById(R.id.imgBTNMuteUser);
 
 //            spinner = itemView.findViewById(R.id.spinner);
 //            tvFullName = itemView.findViewById(R.id.tvFullName);

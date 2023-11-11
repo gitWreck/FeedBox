@@ -85,7 +85,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imgSentiment"
+                android:id="@+id/imgBTNMuteUser"
                 android:layout_gravity="center"
                 android:src="@drawable/complaint_icon"
                 android:layout_width="32dp"

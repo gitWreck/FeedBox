@@ -140,6 +140,7 @@ public class ComplaintActivity extends AppCompatActivity {
                 LoadFeedback();
             }
         });
+
         chipDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

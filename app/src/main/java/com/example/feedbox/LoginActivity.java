@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -161,11 +162,23 @@ public class LoginActivity extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            if(!response.equals("[]"))
-                            {
+                        if(response.contains("BlockedMessage")) {
+                            try {
                                 JSONObject jsonObject = new JSONObject(response);
-
+                                ToastMessage(jsonObject.getString("BlockedMessage"));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else if (response.contains("InvalidMessage")) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                ToastMessage(jsonObject.getString("InvalidMessage"));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                                 for(int i = 0; i < jsonArray.length(); i++)
                                 {
@@ -192,15 +205,9 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
+                            } catch (Exception e) {
+                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                            else
-                            {
-                                Toast.makeText(LoginActivity.this, "Invalid credentials.", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (Exception e) {
-
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new com.android.volley.Response.ErrorListener() {
@@ -235,6 +242,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    void ToastMessage(String loadMsg) {
+        Toast.makeText(LoginActivity.this, loadMsg, Toast.LENGTH_SHORT).show();
     }
 
     void LoginChecker()
