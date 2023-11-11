@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,7 +44,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    LinearLayout linearLayoutBack;
+    LinearLayout linearLayoutBack, linearLayoutSubCateg, linearLayoutSpeCom;
     CardView cardViewAdd;
 
     @Override
@@ -51,6 +52,8 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_activity);
 
+//        linearLayoutSubCateg = findViewById(R.id.linearLayoutSubCategory);
+//        linearLayoutSpeCom = findViewById(R.id.linearLayoutSpecificComplaint);
         linearLayoutBack = findViewById(R.id.linearLayoutBack);
         cardViewAdd = findViewById(R.id.cardViewAdd);
         recyclerView = findViewById(R.id.recyclerView);
@@ -72,6 +75,14 @@ public class CategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+//        linearLayoutSubCateg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent= new Intent(CategoryActivity.this, SubCategoryActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         cardViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override

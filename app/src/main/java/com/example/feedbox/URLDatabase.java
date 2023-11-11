@@ -4,6 +4,9 @@ public class URLDatabase
 {
     static String URLLH = "http://192.168.1.11/feedbox/";
 
+    public static String URL_LIST_SPECIFIC = URLLH + "URL_LIST_SPECIFIC.php";
+    public static String URL_LIST_SPECIFIC_EDIT = URLLH + "URL_LIST_SPECIFIC_EDIT.php";
+    public static String URL_LIST_SPECIFIC_DELETE = URLLH + "URL_LIST_SPECIFIC_DELETE.php";
     public static String URL_MUTE_USER = URLLH + "URL_MUTE_USER.php";
     public static String URL_MUTE_CHECK_USER = URLLH + "URL_MUTE_CHECK_USER.php";
     public static String URL_CHECK_ACCOUNT = URLLH + "URL_CHECK_ACCOUNT.php";

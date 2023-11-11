@@ -84,5 +84,80 @@
 
         </ImageView>
     </androidx.cardview.widget.CardView>
+<!--    <LinearLayout-->
+<!--        android:layout_marginBottom="5sp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_gravity="center"-->
+<!--            android:id="@+id/linearLayoutSubCategory"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <ImageView-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/category_icon"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp">-->
+
+<!--            </ImageView>-->
+
+<!--            <TextView-->
+<!--                android:layout_gravity="center"-->
+<!--                android:fontFamily="@font/cabin"-->
+<!--                android:textSize="13sp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="Sub Category"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--            </TextView>-->
+<!--        </LinearLayout>-->
+
+
+<!--        <LinearLayout-->
+<!--            android:layout_gravity="center"-->
+<!--            android:id="@+id/linearLayoutSpecificComplaint"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <ImageView-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/complaint_icon"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp">-->
+
+<!--            </ImageView>-->
+
+<!--            <TextView-->
+<!--                android:layout_gravity="center"-->
+<!--                android:fontFamily="@font/cabin"-->
+<!--                android:textSize="13sp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="Specific Complaint"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--            </TextView>-->
+<!--        </LinearLayout>-->
+
+
+<!--    </LinearLayout>-->
 
 </LinearLayout>

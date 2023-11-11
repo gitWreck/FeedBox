@@ -2,7 +2,7 @@ package com.example.feedbox;
 
 public class SubCategoryHelper
 {
-    String SubCategoryID, CategoryID, SubCategoryName, DatePosted;
+    String SubCategoryID, CategoryID, SubCategoryName, DatePosted, CategoryName;
 
     public String getSubCategoryID() {
         return SubCategoryID;
@@ -36,10 +36,19 @@ public class SubCategoryHelper
         DatePosted = datePosted;
     }
 
-    public SubCategoryHelper(String subCategoryID, String categoryID, String subCategoryName, String datePosted) {
+    public String getCategoryName() {
+        return CategoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        CategoryName = categoryName;
+    }
+
+    public SubCategoryHelper(String subCategoryID, String categoryID, String subCategoryName, String datePosted, String categoryName) {
         SubCategoryID = subCategoryID;
         CategoryID = categoryID;
         SubCategoryName = subCategoryName;
         DatePosted = datePosted;
+        CategoryName = categoryName;
     }
 }

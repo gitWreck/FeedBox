@@ -16,6 +16,12 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string-array name="list_specific">
+        <item>details</item>
+        <item>sub_details</item>
+        <item>what_happened</item>
+    </string-array>
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

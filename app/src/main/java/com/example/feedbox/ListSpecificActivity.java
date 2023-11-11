@@ -6,12 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -36,65 +35,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SubCategoryActivity extends AppCompatActivity {
+public class ListSpecificActivity extends AppCompatActivity {
 
-    List<SubCategoryHelper> subCategoryHelpers;
-    SubCategoryAdapter subCategoryAdapter;
+    List<ListSpecificHelper> listSpecificHelpers;
+    ListSpecificAdapter listSpecificAdapter;
 
     RecyclerView recyclerView;
 
-    LinearLayout linearLayoutBack;
-    String CategoryID, CategoryName;
-    TextView tvCategoryName;
+    String Sc_Name, Cat_Name;
+    TextView tvSubName;
 
+    LinearLayout linearLayoutBack, linearLayoutSubCateg, linearLayoutSpeCom;
     CardView cardViewAdd;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sub_category_activity);
+        setContentView(R.layout.list_specific_activty);
+
+        Sc_Name = getIntent().getExtras().getString("sc_name");
+        Cat_Name = getIntent().getExtras().getString("cat_name");
 
         linearLayoutBack = findViewById(R.id.linearLayoutBack);
-        tvCategoryName = findViewById(R.id.tvCategoryName);
-        cardViewAdd = findViewById(R.id.cardViewAdd);
+        cardViewAdd = findViewById(R.id.cardViewAddListSpec);
+        recyclerView = findViewById(R.id.recyclerViewLS);
+        tvSubName = findViewById(R.id.tvListSpecificName);
 
-        SharedPreferences sh = getSharedPreferences("FeedBox", Context.MODE_PRIVATE);
+        listSpecificHelpers = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
+        listSpecificAdapter = new ListSpecificAdapter(listSpecificHelpers, this);
 
-        CategoryID = getIntent().getExtras().getString("CategoryID");
-        CategoryName = getIntent().getExtras().getString("CategoryName");
+        LinearLayoutManager linearLayoutManager3 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager3);
+        recyclerView.setAdapter(listSpecificAdapter);
 
-        tvCategoryName.setText(CategoryName);
+        tvSubName.setText(Sc_Name + " " + Cat_Name);
 
-        linearLayoutBack.setOnClickListener(new View.OnClickListener()
-        {
+        linearLayoutBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
 
-        subCategoryHelpers = new ArrayList<>();
-
-        recyclerView = findViewById(R.id.recyclerView);
-
-        recyclerView.setHasFixedSize(true);
-
-        subCategoryAdapter = new SubCategoryAdapter(subCategoryHelpers, this);
-
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager2);
-
-        recyclerView.setAdapter(subCategoryAdapter);
-
         cardViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new Dialog(SubCategoryActivity.this);
+                Dialog dialog = new Dialog(ListSpecificActivity.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.sub_category_add_layout);
+                dialog.setContentView(R.layout.list_specific_add_layout);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 Window window = dialog.getWindow();
@@ -106,13 +97,13 @@ public class SubCategoryActivity extends AppCompatActivity {
 
                 CardView cardViewSubmit;
 
-                EditText txtSubCategoryName;
+                EditText etCompleSpe;
 
                 cardViewSubmit = dialog.findViewById(R.id.cardViewSubmit);
 
-                txtSubCategoryName = dialog.findViewById(R.id.txtSubCategoryName);
+                etCompleSpe = dialog.findViewById(R.id.txtComplaintSpe);
 
-                txtSubCategoryName.addTextChangedListener(new TextWatcher() {
+                etCompleSpe.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -120,7 +111,7 @@ public class SubCategoryActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if(txtSubCategoryName.getText().toString().isEmpty())
+                        if(etCompleSpe.getText().toString().isEmpty())
                         {
                             cardViewSubmit.setEnabled(false);
                             cardViewSubmit.setClickable(false);
@@ -142,13 +133,19 @@ public class SubCategoryActivity extends AppCompatActivity {
                     }
                 });
 
+                linearLayoutBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
                 cardViewSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        String url = URLDatabase.URL_SUB_CATEGORY_ADD;
+                        String url = URLDatabase.URL_CATEGORY_ADD;
 
-                        RequestQueue queue = Volley.newRequestQueue(SubCategoryActivity.this);
+                        RequestQueue queue = Volley.newRequestQueue(ListSpecificActivity.this);
 
                         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                             @Override
@@ -156,13 +153,13 @@ public class SubCategoryActivity extends AppCompatActivity {
                             {
                                 dialog.dismiss();
 
-                                LoadSubCategory();
+                                LoadListSpecific();
                             }
                         }, new com.android.volley.Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error)
                             {
-                                Toast.makeText(SubCategoryActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ListSpecificActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }) {
                             @Override
@@ -174,8 +171,7 @@ public class SubCategoryActivity extends AppCompatActivity {
                             protected Map<String, String> getParams()
                             {
                                 Map<String, String> params = new HashMap<String, String>();
-                                params.put("category_id", CategoryID);
-                                params.put("sub_category_name", txtSubCategoryName.getText().toString());
+                                params.put("spc_d_name", etCompleSpe.getText().toString());
                                 return params;
                             }
                         };
@@ -183,63 +179,65 @@ public class SubCategoryActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
+
+
+
+
+
+
             }
         });
 
-        LoadSubCategory();
+        LoadListSpecific();
     }
 
-    void LoadSubCategory()
-    {
-        subCategoryHelpers.clear();
-        recyclerView.setAdapter(subCategoryAdapter);
-        String url = URLDatabase.URL_SUB_CATEGORY_LIST;
+    void LoadListSpecific() {
+        listSpecificHelpers.clear();
+        recyclerView.setAdapter(listSpecificAdapter);
+        String url = URLDatabase.URL_LIST_SPECIFIC;
 
-        RequestQueue queue = Volley.newRequestQueue(SubCategoryActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(ListSpecificActivity.this);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
-                        subCategoryHelpers.clear();
+//                    if(!response.equals("[]"))
+//                    {
+                    listSpecificHelpers.clear();
+//                        JSONObject jsonObject = new JSONObject(response);
+//
+//                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
+                    for(int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonObject = new JSONObject(response);
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
-                            try {
-                                JSONObject jsonObjectData = jsonArray.getJSONObject(i);
-
-                                String subCategoryID = jsonObjectData.getString("sub_category_id");
-                                String categoryID = jsonObjectData.getString("category_id");
-                                String subCategoryName = jsonObjectData.getString("sub_category_name");
-                                String datePosted = jsonObjectData.getString("date_posted");
-
-                                subCategoryHelpers.add(new SubCategoryHelper(subCategoryID,categoryID,subCategoryName,datePosted, CategoryName));
-                            }
-
-                            catch (Exception err)
-                            {
-                                Toast.makeText(SubCategoryActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                            int spc_d_id = jsonObjectData.getInt("spc_d_id");
+                            String spc_d_cat = jsonObjectData.getString("spc_d_cat");
+                            String spc_d_name = jsonObjectData.getString("spc_d_name");
+                            int sc_id = jsonObjectData.getInt("sc_id");
+                            String sc_name = jsonObjectData.getString("sc_name");
+                            int cat_id = jsonObjectData.getInt("cat_id");
+                            String cat_name = jsonObjectData.getString("cat_name");
+                            Log.d("TAG", "onResponse: " + spc_d_cat);
+                            listSpecificHelpers.add(new ListSpecificHelper(spc_d_id,spc_d_cat,spc_d_name,sc_name,cat_name));
                         }
-
-                        recyclerView.setAdapter(subCategoryAdapter);
+                        catch (Exception err) {
+                            Toast.makeText(ListSpecificActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-
+                    recyclerView.setAdapter(listSpecificAdapter);
+//                    }
                 } catch (Exception e) {
-
-                    Toast.makeText(SubCategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListSpecificActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Toast.makeText(SubCategoryActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListSpecificActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -251,7 +249,8 @@ public class SubCategoryActivity extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("category_id", CategoryID);
+                params.put("sc_name", Sc_Name);
+                params.put("cat_name", Cat_Name);
                 return params;
             }
         };

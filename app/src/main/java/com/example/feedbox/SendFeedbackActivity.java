@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -205,31 +207,23 @@ public class SendFeedbackActivity extends AppCompatActivity{
     void LoadCategory()
     {
         String url = URLDatabase.URL_CATEGORY_LIST;
-
         RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
-
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
-
+                    if(!response.equals("[]")) {
                         JSONObject jsonObject = new JSONObject(response);
 
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
+                        for(int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
                                 String categoryID = jsonObjectData.getString("category_id");
                                 String categoryName = jsonObjectData.getString("category_name");
-                                String datePosted = jsonObjectData.getString("date_posted");
-
                                 categories.add(categoryName);
                             }
-
                             catch (Exception err)
                             {
                                 Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
@@ -237,375 +231,183 @@ public class SendFeedbackActivity extends AppCompatActivity{
                         }
 
                         ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, categories);
-
                         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                         spinnerCategory.setAdapter(ad);
-
                         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
-                            {
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 String[] simpleArray = new String[ categories.size() ];
                                 categories.toArray(simpleArray);
-
                                 Category = simpleArray[i];
+//                                if(Category.equals("Facilities")) {
+                                subCategories.clear();
 
-                                if(Category.equals("Facilities")) {
-                                    subCategories.clear();
+                                String url = URLDatabase.URL_SUB_CATEGORY_NAME_LIST;
+                                RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+                                StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            if(!response.equals("[]"))
+                                            {
+                                                JSONObject jsonObject = new JSONObject(response);
 
-                                    String url = URLDatabase.URL_SUB_CATEGORY_NAME_LIST;
+                                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                                for(int i = 0; i < jsonArray.length(); i++) {
+                                                    try {
+                                                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
-                                    RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+                                                        String subCategoryID = jsonObjectData.getString("sub_category_id");
+//                                                            String categoryID = jsonObjectData.getString("category_id");
+                                                        String subCategoryName = jsonObjectData.getString("sub_category_name");
+//                                                            String datePosted = jsonObjectData.getString("date_posted");
 
-                                    StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            try {
-                                                if(!response.equals("[]"))
-                                                {
-                                                    JSONObject jsonObject = new JSONObject(response);
-
-                                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                                    for(int i = 0; i < jsonArray.length(); i++)
-                                                    {
-                                                        try {
-                                                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
-
-                                                            String subCategoryID = jsonObjectData.getString("sub_category_id");
-                                                            String categoryID = jsonObjectData.getString("category_id");
-                                                            String subCategoryName = jsonObjectData.getString("sub_category_name");
-                                                            String datePosted = jsonObjectData.getString("date_posted");
-
-                                                            subCategories.add(subCategoryName);
-                                                        }
-
-                                                        catch (Exception err)
-                                                        {
-                                                            Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        subCategories.add(subCategoryName);
+                                                    } catch (Exception err) {
+                                                        Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
-
-                                                    ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, subCategories);
-
-                                                    ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                    spinnerSubCategory.setAdapter(ad);
-
-                                                    spinnerSubCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                        @Override
-                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                            String[] simpleArray = new String[ subCategories.size() ];
-                                                            subCategories.toArray(simpleArray);
-
-                                                            SubCategory = simpleArray[i];
-
-                                                            details.clear();
-                                                            sub_details.clear();
-                                                            what_happened.clear();
-
-
-                                                            //DETAILS
-                                                            {
-                                                                ArrayAdapter ad2 = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, details);
-
-                                                                ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerDetails.setAdapter(ad2);
-
-                                                                spinnerDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ details.size() ];
-                                                                        details.toArray(simpleArray);
-
-                                                                        Details = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            //SUB DETAILS
-                                                            {
-                                                                ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, sub_details);
-
-                                                                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerSubDetails.setAdapter(ad);
-
-                                                                spinnerSubDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ sub_details.size() ];
-                                                                        sub_details.toArray(simpleArray);
-
-                                                                        SubDetails = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            //WHAT HAPPENED
-                                                            {
-                                                                ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, what_happened);
-
-                                                                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerSelectWhatHappened.setAdapter(ad);
-
-                                                                spinnerSelectWhatHappened.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ what_happened.size() ];
-                                                                        what_happened.toArray(simpleArray);
-
-                                                                        WhatHappened = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                        }
-                                                    });
-
                                                 }
 
-                                            } catch (Exception e) {
+                                                ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, subCategories);
+                                                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                                                Toast.makeText(SendFeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }, new com.android.volley.Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error)
-                                        {
-                                            Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }) {
-                                        @Override
-                                        public String getBodyContentType() {
-                                            return "application/x-www-form-urlencoded; charset=UTF-8";
-                                        }
+                                                spinnerSubCategory.setAdapter(ad);
+                                                spinnerSubCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                    @Override
+                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                        String[] simpleArray = new String[ subCategories.size() ];
+                                                        subCategories.toArray(simpleArray);
 
-                                        @Override
-                                        protected Map<String, String> getParams()
-                                        {
-                                            Map<String, String> params = new HashMap<String, String>();
-                                            params.put("category_name", Category);
-                                            return params;
-                                        }
-                                    };
-                                    request.setRetryPolicy(new DefaultRetryPolicy(
-                                            10000,
-                                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-                                    );
-                                    queue.add(request);
-                                }
-                                else if (Category.equals("Conduct")) {
-                                    subCategories.clear();
+                                                        SubCategory = simpleArray[i];
 
-                                    String url = URLDatabase.URL_SUB_CATEGORY_NAME_LIST;
+                                                        details.clear();
+                                                        sub_details.clear();
+                                                        what_happened.clear();
 
-                                    RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+                                                        String url = URLDatabase.URL_LIST_SPECIFIC;
+                                                        RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+                                                        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(String response) {
+                                                                try {
+                                                                    JSONArray jsonArray = new JSONArray(response);
+                                                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                                                        try {
+                                                                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
-                                    StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            try {
-                                                if(!response.equals("[]"))
-                                                {
-                                                    JSONObject jsonObject = new JSONObject(response);
+                                                                            int spc_d_id = jsonObjectData.getInt("spc_d_id");
+                                                                            String spc_d_cat = jsonObjectData.getString("spc_d_cat");
+                                                                            String spc_d_name = jsonObjectData.getString("spc_d_name");
+                                                                            int sc_id = jsonObjectData.getInt("sc_id");
+                                                                            String sc_name = jsonObjectData.getString("sc_name");
+                                                                            int cat_id = jsonObjectData.getInt("cat_id");
+                                                                            String cat_name = jsonObjectData.getString("cat_name");
 
-                                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                                    for(int i = 0; i < jsonArray.length(); i++)
-                                                    {
-                                                        try {
-                                                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+//                                                                            Toast.makeText(SendFeedbackActivity.this, spc_d_name, Toast.LENGTH_SHORT).show();
+                                                                            Log.d("TAG", "onResponse: " + spc_d_name);
 
-                                                            String subCategoryID = jsonObjectData.getString("sub_category_id");
-                                                            String categoryID = jsonObjectData.getString("category_id");
-                                                            String subCategoryName = jsonObjectData.getString("sub_category_name");
-                                                            String datePosted = jsonObjectData.getString("date_posted");
+                                                                            if (spc_d_cat.equals("details")) {
+                                                                                details.add(spc_d_name);
+                                                                            } else if (spc_d_cat.equals("sub_details")) {
+                                                                                sub_details.add(spc_d_name);
+                                                                            } else if (spc_d_cat.equals("what_happened")) {
+                                                                                what_happened.add(spc_d_name);
+                                                                            }
 
-                                                            subCategories.add(subCategoryName);
-                                                        }
+                                                                            loadListSpecific();
+                                                                        } catch (Exception err) {
+                                                                            Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
 
-                                                        catch (Exception err)
-                                                        {
-                                                            Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
+
+                                                                } catch (Exception err) {
+                                                                    Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                }
+                                                                if (response.contains("[]")) {
+                                                                    Toast.makeText(SendFeedbackActivity.this, "List Empty. Choose Another Category", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        }, new com.android.volley.Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError error)
+                                                            {
+                                                                Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }) {
+                                                            @Override
+                                                            public String getBodyContentType() {
+                                                                return "application/x-www-form-urlencoded; charset=UTF-8";
+                                                            }
+
+                                                            @Override
+                                                            protected Map<String, String> getParams()
+                                                            {
+                                                                Map<String, String> params = new HashMap<String, String>();
+                                                                params.put("sc_name", SubCategory);
+                                                                params.put("cat_name", Category);
+                                                                return params;
+                                                            }
+                                                        };
+                                                        request.setRetryPolicy(new DefaultRetryPolicy(
+                                                                10000,
+                                                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+                                                        );
+                                                        queue.add(request);
                                                     }
+                                                    @Override
+                                                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-                                                    ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, subCategories);
-
-                                                    ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                    spinnerSubCategory.setAdapter(ad);
-
-                                                    spinnerSubCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                                                    {
-                                                        @Override
-                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
-                                                        {
-                                                            String[] simpleArray = new String[ subCategories.size() ];
-                                                            subCategories.toArray(simpleArray);
-
-                                                            SubCategory = simpleArray[i];
-
-                                                            details.clear();
-                                                            sub_details.clear();
-                                                            what_happened.clear();
-
-
-
-                                                            //DETAILS
-                                                            {
-                                                                ArrayAdapter ad2 = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, details);
-
-                                                                ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerDetails.setAdapter(ad2);
-
-                                                                spinnerDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ details.size() ];
-                                                                        details.toArray(simpleArray);
-
-                                                                        Details = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            //SUB DETAILS
-                                                            {
-                                                                ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, sub_details);
-
-                                                                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerSubDetails.setAdapter(ad);
-
-                                                                spinnerSubDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ sub_details.size() ];
-                                                                        sub_details.toArray(simpleArray);
-
-                                                                        SubDetails = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            //WHAT HAPPENED
-                                                            {
-                                                                ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, what_happened);
-
-                                                                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                                                spinnerSelectWhatHappened.setAdapter(ad);
-
-                                                                spinnerSelectWhatHappened.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        String[] simpleArray = new String[ what_happened.size() ];
-                                                                        what_happened.toArray(simpleArray);
-
-                                                                        WhatHappened = simpleArray[i];
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                        }
-                                                    });
-
-                                                }
-
-                                            } catch (Exception e) {
-
-                                                Toast.makeText(SendFeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
+                                        } catch (Exception e) {
+                                            Toast.makeText(SendFeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
-                                    }, new com.android.volley.Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error)
-                                        {
-                                            Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }) {
-                                        @Override
-                                        public String getBodyContentType() {
-                                            return "application/x-www-form-urlencoded; charset=UTF-8";
-                                        }
+                                    }
+                                }, new com.android.volley.Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error)
+                                    {
+                                        Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }) {
+                                    @Override
+                                    public String getBodyContentType() {
+                                        return "application/x-www-form-urlencoded; charset=UTF-8";
+                                    }
 
-                                        @Override
-                                        protected Map<String, String> getParams()
-                                        {
-                                            Map<String, String> params = new HashMap<String, String>();
-                                            params.put("category_name", Category);
-                                            return params;
-                                        }
-                                    };
-                                    request.setRetryPolicy(new DefaultRetryPolicy(
-                                            10000,
-                                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-                                    );
-                                    queue.add(request);
-                                }
+                                    @Override
+                                    protected Map<String, String> getParams()
+                                    {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("category_name", Category);
+                                        return params;
+                                    }
+                                };
+                                request.setRetryPolicy(new DefaultRetryPolicy(
+                                        10000,
+                                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+                                );
+                                queue.add(request);
+//                                }
                             }
-
                             @Override
                             public void onNothingSelected(AdapterView<?> adapterView) {
 
                             }
                         });
                     }
-
                 } catch (Exception e) {
-
                     Toast.makeText(SendFeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -615,8 +417,7 @@ public class SendFeedbackActivity extends AppCompatActivity{
             }
 
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 //params.put("email", Email);
                 return params;
@@ -629,4 +430,79 @@ public class SendFeedbackActivity extends AppCompatActivity{
         );
         queue.add(request);
     }
+
+    void loadListSpecific () {
+        // Details
+        {
+            ArrayAdapter ad2 = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, details);
+
+            ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerDetails.setAdapter(ad2);
+
+            spinnerDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] simpleArray = new String[ details.size() ];
+                    details.toArray(simpleArray);
+
+                    Details = simpleArray[i];
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+
+        //SUB DETAILS
+        {
+            ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, sub_details);
+
+            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerSubDetails.setAdapter(ad);
+
+            spinnerSubDetails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] simpleArray = new String[ sub_details.size() ];
+                    sub_details.toArray(simpleArray);
+
+                    SubDetails = simpleArray[i];
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+
+        //WHAT HAPPENED
+        {
+            ArrayAdapter ad = new ArrayAdapter(SendFeedbackActivity.this, android.R.layout.simple_spinner_item, what_happened);
+
+            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerSelectWhatHappened.setAdapter(ad);
+
+            spinnerSelectWhatHappened.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] simpleArray = new String[ what_happened.size() ];
+                    what_happened.toArray(simpleArray);
+
+                    WhatHappened = simpleArray[i];
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+    }
+
 }
