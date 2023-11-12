@@ -117,6 +117,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 //                        bundle.putString("CategoryID", CategoryHelper.getCategoryID());
                         bundle.putString("cat_name", SubCategoryHelper.getCategoryName());
                         bundle.putString("sc_name", SubCategoryHelper.getSubCategoryName());
+                        bundle.putString("cat_id", SubCategoryHelper.getCategoryID());
+                        bundle.putString("sc_id", SubCategoryHelper.getSubCategoryID());
                         intent.putExtras(bundle);
 
                         ((Activity)context).startActivity(intent);

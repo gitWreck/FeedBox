@@ -193,8 +193,7 @@ public class CategoryActivity extends AppCompatActivity {
         LoadCategory();
     }
 
-    void LoadCategory()
-    {
+    void LoadCategory() {
         categoryHelpers.clear();
         recyclerView.setAdapter(categoryAdapter);
         String url = URLDatabase.URL_CATEGORY_LIST;

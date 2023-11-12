@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -39,24 +40,24 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,25 +65,27 @@ import java.util.Map;
 public class HomeAdminActivity extends AppCompatActivity {
 
     LinearLayout linearLayoutAdmin, linearLayoutComplaint, linearLayoutUser, linearLayoutCategory, linearLayoutReport;
-
     ImageView imgViewLogout;
-
-    BarChart barChart;
+    TextView tvActiveAY, tvPendingCount, tvInProgressCount, tvCompletedCount, tvTotalFeedbacks, tvTotalUsers;
 
     List<String> xValues = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
     ArrayList<BarEntry> entries = new ArrayList<>();
     int count = 0;
     int PendingCount = 0, InProgressCount = 0, CompletedCount = 0, TotalUsers = 0;
 
-    TextView tvPendingCount, tvInProgressCount, tvCompletedCount, tvTotalFeedbacks, tvTotalUsers;
 
     List<String> categories = new ArrayList<String>();
-    String Category;
-    Spinner spinner;
+    List<String> ay_range_list = new ArrayList<String>();
+
+    String Category, Month, AY_Range;
+    Spinner spinnerCat, spinnerMonth, spinnerYear;
 
     PieChart pieChart;
+    BarChart barChart;
 
     RecyclerView recyclerView;
+    DateFormat dateFormat;
+    Date date;
 
     List<SentimentCommentHelper> sentimentCommentHelpers;
     SentimentCommentAdapter sentimentCommentAdapter;
@@ -92,6 +95,11 @@ public class HomeAdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_admin_activity);
+        dateFormat = new SimpleDateFormat("MM");
+        date = new Date();
+        Log.d("Month ", dateFormat.format(date));
+        categories.add("All");
+        Category = "All";
 
         linearLayoutAdmin = findViewById(R.id.linearLayoutAdmin);
         linearLayoutComplaint = findViewById(R.id.linearLayoutComplaint);
@@ -100,14 +108,22 @@ public class HomeAdminActivity extends AppCompatActivity {
         linearLayoutReport = findViewById(R.id.linearLayoutReport);
         imgViewLogout = findViewById(R.id.imgViewLogout);
 
+
+
         tvTotalFeedbacks = findViewById(R.id.tvTotalFeedbacks);
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
 
+        tvActiveAY = findViewById(R.id.tvActiveAY);
         tvPendingCount = findViewById(R.id.tvPendingCount);
         tvInProgressCount = findViewById(R.id.tvInProgressCount);
         tvCompletedCount = findViewById(R.id.tvCompletedCount);
 
-        spinner = findViewById(R.id.spinner);
+        spinnerCat = findViewById(R.id.spinnerSelCat);
+//        spinnerMonth = findViewById(R.id.spinnerSelMon);
+//        spinnerYear = findViewById(R.id.spinnerSelAY);
+
+//        spinnerYear.setVisibility(View.GONE);
+
         recyclerView = findViewById(R.id.recyclerView);
         tvSentimentCount = findViewById(R.id.tvSentimentCount);
 
@@ -131,6 +147,14 @@ public class HomeAdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(HomeAdminActivity.this, AdminActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        linearLayoutReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(HomeAdminActivity.this, GenerateReportActivity.class);
                 startActivity(intent);
             }
         });
@@ -208,18 +232,85 @@ public class HomeAdminActivity extends AppCompatActivity {
 
         barChart.getAxisRight().setDrawLabels(false);
 
+        GetActiveAY();
         LoadFeedback();
+//        LoadSpin();
         LoadTotalUsers();
+
+
+        LoadMonthly();
     }
 
     private void showPieChart(){
 
 
     }
+//    public void setSpinText(Spinner spin, int pos) {
+//        for(int i = 0; i < spin.getAdapter().getCount(); i++) {
+////            if(spin.getAdapter().getItem(i).toString().equals(text)) {
+////                spin.setSelection(i);
+//////                position = i;
+////            }
+//            if(i == pos) {
+//                spin.setSelection(i);
+////                position = i;
+//            }
+//        }
+//    }
+
+    void GetActiveAY(){
+        String url = URLDatabase.URL_AY_ACTIVE;
+        RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+//                JSONObject jsonObject = new JSONObject(response)
+                    for(int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+
+                        int ret_ay_id = jsonObjectData.getInt("ay_id");
+                        String ret_ay_active = jsonObjectData.getString("ay_range");
+                        String ret_ay_status = jsonObjectData.getString("ay_status");
+                        AY_Range = ret_ay_active;
+//                        Toast.makeText(HomeAdminActivity.this, String.valueOf(jsonArray.length()), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception err) {
+                    Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                tvActiveAY.setText(AY_Range);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                tvActiveAY.setText(error.toString());
+                Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("active", "dwa");
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+        queue.add(request);
+    }
+
 
     double percentageLike, percentageDislike;
-    void LoadChart()
-    {
+    void LoadPieChart() {
 
         percentageLike = 0;
         percentageDislike = 0;
@@ -231,14 +322,10 @@ public class HomeAdminActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
-
+                    if(!response.equals("[]")) {
                         JSONObject jsonObject = new JSONObject(response);
-
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
+                        for(int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
@@ -314,32 +401,20 @@ public class HomeAdminActivity extends AppCompatActivity {
                                 //showing the value of the entries, default true if not set
                                 pieData.setDrawValues(true);
 
-
-
                                 pieChart.setData(pieData);
                                 pieChart.invalidate();
-
-
-                            }
-
-                            catch (Exception err)
-                            {
+                            } catch (Exception err) {
                                 Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
                     }
-
                 } catch (Exception e) {
-
                     Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -347,12 +422,11 @@ public class HomeAdminActivity extends AppCompatActivity {
             public String getBodyContentType() {
                 return "application/x-www-form-urlencoded; charset=UTF-8";
             }
-
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("category", Category);
+                params.put("ay_range", AY_Range);
                 return params;
             }
         };
@@ -364,103 +438,80 @@ public class HomeAdminActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    void LoadCategory()
-    {
-        String url = URLDatabase.URL_CATEGORY_LIST;
-
-        RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
-
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    if(!response.equals("[]"))
-                    {
-
-                        JSONObject jsonObject = new JSONObject(response);
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
-                            try {
-                                JSONObject jsonObjectData = jsonArray.getJSONObject(i);
-
-                                String categoryID = jsonObjectData.getString("category_id");
-                                String categoryName = jsonObjectData.getString("category_name");
-                                String datePosted = jsonObjectData.getString("date_posted");
-
-                                categories.add(categoryName);
-                            }
-
-                            catch (Exception err)
-                            {
-                                Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        ArrayAdapter ad = new ArrayAdapter(HomeAdminActivity.this, android.R.layout.simple_spinner_item, categories);
-
-                        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                        spinner.setAdapter(ad);
-
-                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
-                            {
-                                String[] simpleArray = new String[ categories.size() ];
-                                categories.toArray(simpleArray);
-
-                                Category = simpleArray[i];
-
-                                LoadMonthly();
-                                LoadChart();
-                                LoadSentiment();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                    }
-
-                } catch (Exception e) {
-
-                    tvPendingCount.setText(e.getMessage());
-                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    void LoadSpin() {
+        {
+            ArrayAdapter ad = new ArrayAdapter(HomeAdminActivity.this, android.R.layout.simple_spinner_item, categories);
+            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCat.setAdapter(ad);
+            spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] simpleArray = new String[categories.size()];
+                    categories.toArray(simpleArray);
+                    Category = simpleArray[i];
+                    LoadPieChart();
+                    LoadSentiment();
+                    LoadMonthly();
                 }
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-            }
 
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<String, String>();
-                //params.put("email", Email);
-                return params;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        );
-        queue.add(request);
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+
+//        {
+//            ArrayAdapter aaMon = ArrayAdapter.createFromResource(
+//                    HomeAdminActivity.this,
+//                    R.array.listMonths,
+//                    android.R.layout.simple_spinner_item
+//            );
+//            ;
+//            aaMon.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            spinnerMonth.setAdapter(aaMon);
+//
+//            spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    // On selecting a spinner item
+//                    Month = parent.getItemAtPosition(position).toString();
+//                    // Showing selected spinner item
+////                Toast.makeText(parent.getContext(), "Selected: " +Month, Toast.LENGTH_LONG).show();
+//                    LoadChart();
+//                    LoadSentiment();
+//                }
+//
+//                public void onNothingSelected(AdapterView<?> arg0) {
+//                    // TODO Auto-generated method stub
+//                }
+//            });
+//        }
+//
+//        {
+//            ArrayAdapter aaAY = new ArrayAdapter(HomeAdminActivity.this, android.R.layout.simple_spinner_item, ay_range_list);
+//            aaAY.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            spinnerYear.setAdapter(aaAY);
+//            spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                    String[] simpleArray = new String[ay_range_list.size()];
+//                    ay_range_list.toArray(simpleArray);
+//                    AY_Range = simpleArray[i];
+//                    LoadChart();
+//                    LoadSentiment();
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                }
+//            });
+//        }
+//        setSpinText(spinnerMonth, Integer.parseInt(dateFormat.format(date)) - 1);
     }
 
-    void LoadFeedback()
-    {
+    void LoadFeedback() {
         String url = URLDatabase.URL_FEEDBACK_ADMIN_LIST;
 
         RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
@@ -487,27 +538,18 @@ public class HomeAdminActivity extends AppCompatActivity {
                                 String description = jsonObjectData.getString("description");
                                 String status = jsonObjectData.getString("status");
                                 String subStatus = jsonObjectData.getString("sub_status");
+                                String ay_range = jsonObjectData.getString("ay_range");
                                 String datePosted = jsonObjectData.getString("date_posted");
 
-                                if(status.equals("Pending"))
-                                {
+                                if (status.equals("Pending")) {
                                     PendingCount++;
-                                }
-
-                                if(status.equals("In Progress"))
-                                {
+                                } else if (status.equals("In Progress")) {
                                     InProgressCount++;
-                                }
-
-                                if(status.equals("Completed"))
-                                {
+                                } else if (status.equals("Completed")) {
                                     CompletedCount++;
                                 }
-
                             }
-
-                            catch (Exception err)
-                            {
+                            catch (Exception err) {
                                 Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -518,13 +560,13 @@ public class HomeAdminActivity extends AppCompatActivity {
 
                         tvTotalFeedbacks.setText(String.valueOf(PendingCount + InProgressCount + CompletedCount));
 
-                        LoadCategory();
                     }
-
                 } catch (Exception e) {
-
                     Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+
+                LoadCategory();
+//                LoadAY();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -554,8 +596,7 @@ public class HomeAdminActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    void LoadTotalUsers()
-    {
+    void LoadTotalUsers() {
         String url = URLDatabase.URL_USER_LIST;
 
         RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
@@ -611,8 +652,7 @@ public class HomeAdminActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    void LoadSentiment()
-    {
+    void LoadSentiment() {
         String url = URLDatabase.URL_SENTIMENT_LIST;
 
         RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
@@ -621,13 +661,10 @@ public class HomeAdminActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
+                    if(!response.equals("[]")) {
                         JSONObject jsonObject = new JSONObject(response);
-
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
+                        for(int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
@@ -636,19 +673,13 @@ public class HomeAdminActivity extends AppCompatActivity {
                                 sentimentCommentHelpers.add(new SentimentCommentHelper(description));
 
                                 recyclerView.setAdapter(sentimentCommentAdapter);
-                            }
-
-                            catch (Exception err)
-                            {
+                            } catch (Exception err) {
                                 Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
                         tvSentimentCount.setText(jsonArray.length() + " response");
                     }
-
                 } catch (Exception e) {
-
                     Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -680,12 +711,11 @@ public class HomeAdminActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    void LoadMonthly()
-    {
+    void LoadMonthly() {
         count = 0;
         entries.clear();
 
-        String url = URLDatabase.URL_MONTHLY_SALES;
+        String url = URLDatabase.URL_BAR_GRAPH;
 
         RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
 
@@ -693,108 +723,42 @@ public class HomeAdminActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+    //                    try {
+                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+                        int fbCount = jsonObjectData.getInt("fbCount");
+                        String month = jsonObjectData.getString("Month");
+                        entries.add(new BarEntry(i, fbCount));
+//                            Log.d("TAG", "onResponse: " + month + " FB_Count: " + fbCount);
 
-                    if(!response.equals("[]"))
-                    {
-                        JSONObject jsonObject = new JSONObject(response);
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
-                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
-                            String January = jsonObjectData.getString("January");
-                            String February = jsonObjectData.getString("February");
-                            String March = jsonObjectData.getString("March");
-                            String April = jsonObjectData.getString("April");
-                            String May = jsonObjectData.getString("May");
-                            String June = jsonObjectData.getString("June");
-                            String July = jsonObjectData.getString("July");
-                            String August = jsonObjectData.getString("August");
-                            String September = jsonObjectData.getString("September");
-                            String October = jsonObjectData.getString("October");
-                            String November = jsonObjectData.getString("November");
-                            String December = jsonObjectData.getString("December");
-
-
-                            entries.add(new BarEntry(count, Integer.parseInt(January)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(February)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(March)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(April)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(May)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(June)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(July)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(August)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(September)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(October)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(November)));
-
-                            count++;
-
-                            entries.add(new BarEntry(count, Integer.parseInt(December)));
-                        }
-
-
-                        YAxis yAxis = barChart.getAxisLeft();
-                        yAxis.setAxisMaximum(0f);
-                        yAxis.setAxisMaximum(100f);
-                        yAxis.setAxisLineWidth(2f);
-                        yAxis.setAxisLineColor(Color.BLACK);
-                        yAxis.setLabelCount(10);
-
-                        BarDataSet dataSet = new BarDataSet(entries, "Months");
-                        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-                        BarData barData = new BarData(dataSet);
-                        barChart.setData(barData);
-
-                        barChart.getDescription().setEnabled(false);
-                        barChart.invalidate();
-
-                        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xValues));
-                        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-                        barChart.getXAxis().setGranularity(1f);
-                        barChart.getXAxis().setGranularityEnabled(true);
                     }
+                    YAxis yAxis = barChart.getAxisLeft();
+                    yAxis.setAxisMaximum(0f);
+                    yAxis.setAxisMaximum(100f);
+                    yAxis.setAxisLineWidth(2f);
+                    yAxis.setAxisLineColor(Color.BLACK);
+                    yAxis.setLabelCount(10);
 
-                } catch (Exception e) {
+                    BarDataSet dataSet = new BarDataSet(entries, "Months");
+                    dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    BarData barData = new BarData(dataSet);
 
-                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    barChart.setData(barData);
+                    barChart.getDescription().setEnabled(false);
+                    barChart.invalidate();
+                    barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xValues));
+                    barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+                    barChart.getXAxis().setGranularity(1f);
+                    barChart.getXAxis().setGranularityEnabled(true);
+
+                } catch (Exception err) {
+                    Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -808,6 +772,7 @@ public class HomeAdminActivity extends AppCompatActivity {
             {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("category", Category);
+                params.put("ay_range", tvActiveAY.getText().toString());
                 return params;
             }
         };
@@ -818,6 +783,117 @@ public class HomeAdminActivity extends AppCompatActivity {
         );
         queue.add(request);
     }
+
+    void LoadCategory() {
+        String url = URLDatabase.URL_CATEGORY_LIST;
+
+        RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    if(!response.equals("[]")) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        for(int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+
+                                String categoryID = jsonObjectData.getString("category_id");
+                                String categoryName = jsonObjectData.getString("category_name");
+                                String datePosted = jsonObjectData.getString("date_posted");
+
+                                categories.add(categoryName);
+                            } catch (Exception err) {
+                                Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+//                    tvPendingCount.setText(e.getMessage());
+                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                LoadSpin();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                //params.put("email", Email);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+        queue.add(request);
+    }
+//    void LoadAY() {
+//        String url = URLDatabase.URL_AY_LIST;
+//        RequestQueue queue = Volley.newRequestQueue(HomeAdminActivity.this);
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONArray jsonArray = new JSONArray(response);
+//                    for(int i = 0; i < jsonArray.length(); i++) {
+//                        try {
+//                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+//
+//                            int ay_id = jsonObjectData.getInt("ay_id");
+//                            String ay_range = jsonObjectData.getString("ay_range");
+//                            String ay_status = jsonObjectData.getString("ay_status");
+//
+//                            ay_range_list.add(ay_range);
+//                        } catch (Exception err) {
+//                            Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+////                    }
+//                } catch (Exception e) {
+////                    tvPendingCount.setText(e.getMessage());
+//                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+////                Log.d("TAG", "onResponse: " + response);
+//                LoadSpin();
+//            }
+//        }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            public String getBodyContentType() {
+//                return "application/x-www-form-urlencoded; charset=UTF-8";
+//            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                //params.put("email", Email);
+//                return params;
+//            }
+//        };
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+//        );
+//        queue.add(request);
+//    }
 
     @Override
     public void onBackPressed() {

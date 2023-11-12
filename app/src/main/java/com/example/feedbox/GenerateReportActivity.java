@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -31,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,55 +38,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListSpecificActivity extends AppCompatActivity {
+public class GenerateReportActivity extends AppCompatActivity {
 
-    List<ListSpecificHelper> listSpecificHelpers;
-    ListSpecificAdapter listSpecificAdapter;
+    List<GenerateReportHelper> generateReportHelpers;
+    GenerateReportAdapter generateReportAdapter;
 
     RecyclerView recyclerView;
 
-    String Sc_Name, Cat_Name, Sc_ID, Cat_ID;
-    TextView tvSubName;
-
-    LinearLayout linearLayoutBack, linearLayoutSubCateg, linearLayoutSpeCom;
+    LinearLayout linearLayoutBack;
     CardView cardViewAdd;
 
-    String PickedSubDet;
+    String PickedStatus;
 
-    public void setSpinText(Spinner spin, String text)
-    {
-        for(int i= 0; i < spin.getAdapter().getCount(); i++)
-        {
-            if(spin.getAdapter().getItem(i).toString().equals(text))
-            {
-                spin.setSelection(i);
-            }
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_specific_activty);
+        setContentView(R.layout.generate_report_activity);
 
-        Sc_Name = getIntent().getExtras().getString("sc_name");
-        Cat_Name = getIntent().getExtras().getString("cat_name");
-        Sc_ID = getIntent().getExtras().getString("sc_id");
-        Cat_ID = getIntent().getExtras().getString("cat_id");
+        linearLayoutBack = findViewById(R.id.linearLayoutBackAY);
+        cardViewAdd = findViewById(R.id.cardViewAddAY);
+        recyclerView = findViewById(R.id.recyclerViewAY);
+        generateReportHelpers = new ArrayList<>();
 
-        linearLayoutBack = findViewById(R.id.linearLayoutBack);
-        cardViewAdd = findViewById(R.id.cardViewAddListSpec);
-        recyclerView = findViewById(R.id.recyclerViewLS);
-        tvSubName = findViewById(R.id.tvListSpecificName);
-
-        listSpecificHelpers = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        listSpecificAdapter = new ListSpecificAdapter(listSpecificHelpers, this);
+        generateReportAdapter = new GenerateReportAdapter(generateReportHelpers, this);
 
-        LinearLayoutManager linearLayoutManager3 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager3);
-        recyclerView.setAdapter(listSpecificAdapter);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager2);
 
-        tvSubName.setText(Sc_Name + " " + Cat_Name);
+        recyclerView.setAdapter(generateReportAdapter);
+
 
         linearLayoutBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,13 +78,13 @@ public class ListSpecificActivity extends AppCompatActivity {
 
         cardViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)  {
-                Dialog dialog = new Dialog(ListSpecificActivity.this);
+            public void onClick(View view) {
+                Dialog dialog = new Dialog(GenerateReportActivity.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.list_specific_add_layout);
+                dialog.setContentView(R.layout.generate_report_add_layout);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 Window window = dialog.getWindow();
@@ -114,11 +95,10 @@ public class ListSpecificActivity extends AppCompatActivity {
                 window.setAttributes(wlp);
 
                 CardView cardViewSubmit;
-
-                Spinner spinner = dialog.findViewById(R.id.spnListSpe);
+                Spinner spinner = dialog.findViewById(R.id.spnActAY);
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                        ListSpecificActivity.this,
-                        R.array.list_specific,
+                        GenerateReportActivity.this,
+                        R.array.listAYActive,
                         android.R.layout.simple_spinner_item
                 );
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -127,8 +107,8 @@ public class ListSpecificActivity extends AppCompatActivity {
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        PickedSubDet = adapterView.getItemAtPosition(i).toString();
-                        Toast.makeText(adapterView.getContext(), "Selected: " + PickedSubDet, Toast.LENGTH_LONG).show();
+                        PickedStatus = adapterView.getItemAtPosition(i).toString();
+                        Toast.makeText(adapterView.getContext(), "Selected: " + PickedStatus, Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -138,13 +118,13 @@ public class ListSpecificActivity extends AppCompatActivity {
                 });
 
 
-                EditText etCompleSpe;
+                EditText txtAY_add;
 
-                cardViewSubmit = dialog.findViewById(R.id.cardViewSubmit);
+                cardViewSubmit = dialog.findViewById(R.id.cardViewSubmitAY);
 
-                etCompleSpe = dialog.findViewById(R.id.txtComplaintSpe);
+                txtAY_add = dialog.findViewById(R.id.txtAY_Add);
 
-                etCompleSpe.addTextChangedListener(new TextWatcher() {
+                txtAY_add.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -152,7 +132,7 @@ public class ListSpecificActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if(etCompleSpe.getText().toString().isEmpty())
+                        if(txtAY_add.getText().toString().isEmpty())
                         {
                             cardViewSubmit.setEnabled(false);
                             cardViewSubmit.setClickable(false);
@@ -180,25 +160,28 @@ public class ListSpecificActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+
                 cardViewSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        String url = URLDatabase.URL_LIST_SPECIFIC_ADD;
+                        String url = URLDatabase.URL_AY_ADD;
 
-                        RequestQueue queue = Volley.newRequestQueue(ListSpecificActivity.this);
+                        RequestQueue queue = Volley.newRequestQueue(GenerateReportActivity.this);
 
                         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                             @Override
-                            public void onResponse(String response) {
+                            public void onResponse(String response)
+                            {
                                 dialog.dismiss();
 
-                                LoadListSpecific();
+                                LoadAY();
                             }
                         }, new com.android.volley.Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(ListSpecificActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            public void onErrorResponse(VolleyError error)
+                            {
+                                Toast.makeText(GenerateReportActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }) {
                             @Override
@@ -210,12 +193,8 @@ public class ListSpecificActivity extends AppCompatActivity {
                             protected Map<String, String> getParams()
                             {
                                 Map<String, String> params = new HashMap<String, String>();
-                                params.put("spc_d_name", etCompleSpe.getText().toString());
-                                params.put("spc_d_cat", PickedSubDet);
-                                params.put("sc_name", Sc_Name);
-                                params.put("cat_name", Cat_Name);
-                                params.put("sc_id", Sc_ID);
-                                params.put("cat_id", Cat_ID);
+                                params.put("ay_range", txtAY_add.getText().toString());
+                                params.put("ay_status", PickedStatus);
                                 return params;
                             }
                         };
@@ -224,69 +203,58 @@ public class ListSpecificActivity extends AppCompatActivity {
                 });
                 dialog.show();
             }
-
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                // An item is selected. You can retrieve the selected item using
-                PickedSubDet = parent.getItemAtPosition(pos).toString();
-                Toast.makeText(parent.getContext(), "Selected: " + PickedSubDet, Toast.LENGTH_LONG).show();
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback.
-            }
         });
 
-        LoadListSpecific();
+        LoadAY();
     }
 
-    void LoadListSpecific() {
-        listSpecificHelpers.clear();
-        recyclerView.setAdapter(listSpecificAdapter);
-        String url = URLDatabase.URL_LIST_SPECIFIC;
+    void LoadAY() {
+        generateReportHelpers.clear();
+        recyclerView.setAdapter(generateReportAdapter);
+        String url = URLDatabase.URL_AY_LIST;
 
-        RequestQueue queue = Volley.newRequestQueue(ListSpecificActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(GenerateReportActivity.this);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-//                    if(!response.equals("[]"))
-//                    {
-//                    listSpecificHelpers.clear();
+//                    if(!response.equals("[]")) {
 //                        JSONObject jsonObject = new JSONObject(response);
-//
 //                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+//
+//                        for(int i = 0; i < jsonArray.length(); i++) {
+//                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+//                            String ay_range = jsonObjectData.getString("ay_range");
+//                            String ay_status = jsonObjectData.getString("ay_status");
+//                            int ay_id = jsonObjectData.getInt("ay_id");
+//
+//                            generateReportHelpers.add(new GenerateReportHelper(ay_range, ay_status, ay_id));
+//                            Log.d("TAG", "onResponse: " + ay_range);
+//                        }
+//                    }
                     JSONArray jsonArray = new JSONArray(response);
                     for(int i = 0; i < jsonArray.length(); i++) {
-                        try {
-                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+                        String ay_range = jsonObjectData.getString("ay_range");
+                        String ay_status = jsonObjectData.getString("ay_status");
+                        int ay_id = jsonObjectData.getInt("ay_id");
 
-                            int spc_d_id = jsonObjectData.getInt("spc_d_id");
-                            String spc_d_cat = jsonObjectData.getString("spc_d_cat");
-                            String spc_d_name = jsonObjectData.getString("spc_d_name");
-                            int sc_id = jsonObjectData.getInt("sc_id");
-                            String sc_name = jsonObjectData.getString("sc_name");
-                            int cat_id = jsonObjectData.getInt("cat_id");
-                            String cat_name = jsonObjectData.getString("cat_name");
-                            Log.d("TAG", "onResponse: " + spc_d_cat);
-                            listSpecificHelpers.add(new ListSpecificHelper(spc_d_id,spc_d_cat,spc_d_name,sc_name,cat_name, sc_id, cat_id));
-                        }
-                        catch (Exception err) {
-                            Toast.makeText(ListSpecificActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                        generateReportHelpers.add(new GenerateReportHelper(ay_range, ay_status, ay_id));
+                        Log.d("TAG", "onResponse: " + ay_range);
                     }
-                    recyclerView.setAdapter(listSpecificAdapter);
-//                    }
+
+                    Log.d("TAG", "onResponse: " + response);
+                    recyclerView.setAdapter((generateReportAdapter));
                 } catch (Exception e) {
-                    Toast.makeText(ListSpecificActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GenerateReportActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Toast.makeText(ListSpecificActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GenerateReportActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -298,8 +266,7 @@ public class ListSpecificActivity extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("sc_name", Sc_Name);
-                params.put("cat_name", Cat_Name);
+                params.put("getListAY", "PickedStatus");
                 return params;
             }
         };

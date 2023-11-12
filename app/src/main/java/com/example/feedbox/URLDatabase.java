@@ -3,8 +3,14 @@ package com.example.feedbox;
 public class URLDatabase
 {
     static String URLLH = "http://192.168.1.11/feedbox/";
-
+    public static String URL_BAR_GRAPH = URLLH + "URL_BAR_GRAPH.php";
+    public static String URL_AY_ACTIVE = URLLH + "URL_AY_ACTIVE.php";
+    public static String URL_AY_ADD = URLLH + "URL_AY_ADD.php";
+    public static String URL_AY_EDIT = URLLH + "URL_AY_EDIT.php";
+    public static String URL_AY_DELETE = URLLH + "URL_AY_DELETE.php";
+    public static String URL_AY_LIST = URLLH + "URL_AY_LIST.php";
     public static String URL_LIST_SPECIFIC = URLLH + "URL_LIST_SPECIFIC.php";
+    public static String URL_LIST_SPECIFIC_ADD = URLLH + "URL_LIST_SPECIFIC_ADD.php";
     public static String URL_LIST_SPECIFIC_EDIT = URLLH + "URL_LIST_SPECIFIC_EDIT.php";
     public static String URL_LIST_SPECIFIC_DELETE = URLLH + "URL_LIST_SPECIFIC_DELETE.php";
     public static String URL_MUTE_USER = URLLH + "URL_MUTE_USER.php";

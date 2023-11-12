@@ -3,6 +3,7 @@ package com.example.feedbox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -61,9 +62,9 @@ public class SendFeedbackActivity extends AppCompatActivity{
     CardView cardViewSubmit;
     String Email;
 
-    String Feedback;
+    String Feedback, AY_Range;
 
-    TextView tvDescription1, tvDescription2, tvDescription3;
+    TextView tvDescription1, tvDescription2, tvDescription3, tvActiveAY;
 
     ImageView imgFeedback;
 
@@ -92,6 +93,9 @@ public class SendFeedbackActivity extends AppCompatActivity{
         tvDescription1 = findViewById(R.id.tvDescription1);
         tvDescription2 = findViewById(R.id.tvDescription2);
         tvDescription3 = findViewById(R.id.tvDescription3);
+        tvActiveAY = findViewById(R.id.tvActiveAYSFB);
+
+        GetActiveAY();
 
         spinnerDetails = findViewById(R.id.spinnerDetails);
         spinnerSubDetails = findViewById(R.id.spinnerSubDetails);
@@ -104,6 +108,11 @@ public class SendFeedbackActivity extends AppCompatActivity{
             }
         });
 
+        cardViewSubmit.setEnabled(true);
+        cardViewSubmit.setClickable(true);
+        cardViewSubmit.setFocusable(true);
+        cardViewSubmit.setAlpha(1.0f);
+
         txtDescription.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,20 +121,20 @@ public class SendFeedbackActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(txtDescription.getText().toString().isEmpty())
-                {
-                    cardViewSubmit.setEnabled(false);
-                    cardViewSubmit.setClickable(false);
-                    cardViewSubmit.setFocusable(false);
-                    cardViewSubmit.setAlpha(0.2f);
-                }
-                else
-                {
-                    cardViewSubmit.setEnabled(true);
-                    cardViewSubmit.setClickable(true);
-                    cardViewSubmit.setFocusable(true);
-                    cardViewSubmit.setAlpha(1.0f);
-                }
+//                if(txtDescription.getText().toString().isEmpty())
+//                {
+//                    cardViewSubmit.setEnabled(false);
+//                    cardViewSubmit.setClickable(false);
+//                    cardViewSubmit.setFocusable(false);
+//                    cardViewSubmit.setAlpha(0.2f);
+//                }
+//                else
+//                {
+//                    cardViewSubmit.setEnabled(true);
+//                    cardViewSubmit.setClickable(true);
+//                    cardViewSubmit.setFocusable(true);
+//                    cardViewSubmit.setAlpha(1.0f);
+//                }
             }
 
             @Override
@@ -134,16 +143,13 @@ public class SendFeedbackActivity extends AppCompatActivity{
             }
         });
 
-        if(Feedback.equals("Like"))
-        {
+        if(Feedback.equals("Like")) {
             tvDescription1.setText("We're glad for your great experience!");
             tvDescription2.setText("In which category do you have good experience?");
             tvDescription3.setText("Share your great experience with us:");
             imgFeedback.setImageTintList(getColorStateList(R.color.emerald));
             cardViewWhatHappened.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             tvDescription1.setText("We're really sorry for your bad experience!");
             tvDescription2.setText("In which category do you have bad experience?");
             tvDescription3.setText("Specify your reason in one sentence");
@@ -194,6 +200,7 @@ public class SendFeedbackActivity extends AppCompatActivity{
                         params.put("what_happened", WhatHappened);
                         params.put("sentiment", Feedback);
                         params.put("description", txtDescription.getText().toString());
+                        params.put("ay_range", tvActiveAY.getText().toString());
                         return params;
                     }
                 };
@@ -204,8 +211,7 @@ public class SendFeedbackActivity extends AppCompatActivity{
         LoadCategory();
     }
 
-    void LoadCategory()
-    {
+    void LoadCategory() {
         String url = URLDatabase.URL_CATEGORY_LIST;
         RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
@@ -505,4 +511,53 @@ public class SendFeedbackActivity extends AppCompatActivity{
         }
     }
 
+    void GetActiveAY(){
+        String url = URLDatabase.URL_AY_ACTIVE;
+        RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+//                JSONObject jsonObject = new JSONObject(response)
+                    for(int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+
+                        int ret_ay_id = jsonObjectData.getInt("ay_id");
+                        String ret_ay_active = jsonObjectData.getString("ay_range");
+                        String ret_ay_status = jsonObjectData.getString("ay_status");
+                        AY_Range = ret_ay_active;
+//                        Toast.makeText(HomeAdminActivity.this, String.valueOf(jsonArray.length()), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception err) {
+                    Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                tvActiveAY.setText(AY_Range);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                tvActiveAY.setText(error.toString());
+                Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("active", "dwa");
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+        queue.add(request);
+    }
 }

@@ -35,35 +35,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapter.ViewHolder> {
+public class GenerateReportAdapter extends RecyclerView.Adapter<GenerateReportAdapter.ViewHolder> {
 
-    String Spc_d_ID, Spc_d_Name, Sc_Name, Cat_Name;
-    int position;
     Context context;
-    String Department, PickedSubDet;
-    private List<ListSpecificHelper> lShelper;
+    private List<GenerateReportHelper> genRepList;
+    String PickedStatus;
 
-    public ListSpecificAdapter(List<ListSpecificHelper> LShelper, Context context2)
-    {
-        lShelper = LShelper;
+    public GenerateReportAdapter(List<GenerateReportHelper>  GenRepList, Context context2){
+        genRepList = GenRepList;
         context = context2;
     }
     @Override
-    public void onViewAttachedToWindow(@NonNull ListSpecificAdapter.ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
+    public int getItemCount() {
+        return genRepList.size();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListSpecificAdapter.ViewHolder holder, int position) {
-        ListSpecificHelper ListSpecificHelper = lShelper.get(position);
+    public GenerateReportAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        holder.tvSpc_d_Cat.setText(String.valueOf(ListSpecificHelper.getSpc_d_Cat()).replace("_"," "));
-        holder.tvSpd_d_Name.setText(ListSpecificHelper.getSpc_d_Name());
+        View contactView = inflater.inflate(R.layout.generate_report_item_layout, parent, false);
 
-        holder.linearLayoutLS.setOnClickListener(new View.OnClickListener() {
+        GenerateReportAdapter.ViewHolder viewHolder = new GenerateReportAdapter.ViewHolder(contactView);
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull GenerateReportAdapter.ViewHolder holder, int position) {
+        GenerateReportHelper generateReportHelper = genRepList.get(position);
+
+        holder.tvAY_Range.setText(generateReportHelper.getAY_Range());
+        holder.tvAY_Status.setText(generateReportHelper.getAY_Status());
+
+        holder.linearLayoutAY.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Dialog dialog = new Dialog(context);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -88,7 +96,6 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                 linearLayoutView.setVisibility(View.GONE);
                 linearLayoutEdit.setVisibility(View.VISIBLE);
                 linearLayoutDelete.setVisibility(View.VISIBLE);
-
                 linearLayoutEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -97,7 +104,7 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setCancelable(true);
                         dialog.setCanceledOnTouchOutside(true);
-                        dialog.setContentView(R.layout.list_specific_add_layout);
+                        dialog.setContentView(R.layout.generate_report_add_layout);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         Window window = dialog.getWindow();
@@ -109,10 +116,10 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
 
                         CardView cardViewSubmit;
 
-                        Spinner spinner = dialog.findViewById(R.id.spnListSpe);
+                        Spinner spinner = dialog.findViewById(R.id.spnActAY);
                         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list_specific,
+                                R.array.listAYActive,
                                 android.R.layout.simple_spinner_item
                         );
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -122,10 +129,10 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 // On selecting a spinner item
-                                PickedSubDet = parent.getItemAtPosition(position).toString();
+                                PickedStatus = parent.getItemAtPosition(position).toString();
 
                                 // Showing selected spinner item
-                                Toast.makeText(parent.getContext(), "Selected: " + PickedSubDet, Toast.LENGTH_LONG).show();
+                                Toast.makeText(parent.getContext(), "Selected: " + PickedStatus, Toast.LENGTH_LONG).show();
                             }
 
                             public void onNothingSelected(AdapterView<?> arg0) {
@@ -134,19 +141,17 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                             }
                         });
 
-                        setSpinText(spinner, ListSpecificHelper.getSpc_d_Cat());
+                        setSpinText(spinner, generateReportHelper.getAY_Status());
 
 //                        spinner.setSelection(position);
 
+                        EditText etAY_range;
 
+                        cardViewSubmit = dialog.findViewById(R.id.cardViewSubmitAY);
 
-                        EditText etComSpe;
+                        etAY_range = dialog.findViewById(R.id.txtAY_Add);
 
-                        cardViewSubmit = dialog.findViewById(R.id.cardViewSubmit);
-
-                        etComSpe = dialog.findViewById(R.id.txtComplaintSpe);
-
-                        etComSpe.addTextChangedListener(new TextWatcher() {
+                        etAY_range.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -154,7 +159,7 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
 
                             @Override
                             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                if(etComSpe.getText().toString().isEmpty())
+                                if(etAY_range.getText().toString().isEmpty())
                                 {
                                     cardViewSubmit.setEnabled(false);
                                     cardViewSubmit.setClickable(false);
@@ -176,13 +181,13 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                             }
                         });
 
-                        etComSpe.setText(ListSpecificHelper.getSpc_d_Name());
+                        etAY_range.setText(generateReportHelper.getAY_Range());
 
                         cardViewSubmit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
-                                String url = URLDatabase.URL_LIST_SPECIFIC_EDIT;
+                                String url = URLDatabase.URL_AY_EDIT;
 
                                 RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -192,7 +197,7 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                                     {
                                         dialog.dismiss();
                                         ((Activity)context).finish();
-                                        Intent intent= new Intent(context, ListSpecificActivity.class);
+                                        Intent intent= new Intent(context, GenerateReportActivity.class);
                                         ((Activity)context).startActivity(intent);
                                     }
                                 }, new com.android.volley.Response.ErrorListener() {
@@ -211,9 +216,9 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                                     protected Map<String, String> getParams()
                                     {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        params.put("spc_d_id", String.valueOf(ListSpecificHelper.getSpc_d_ID()));
-                                        params.put("spc_d_cat", PickedSubDet);
-                                        params.put("spc_d_name", etComSpe.getText().toString());
+                                        params.put("ay_id", String.valueOf(generateReportHelper.getAY_ID()));
+                                        params.put("ay_status", PickedStatus);
+                                        params.put("ay_range", etAY_range.getText().toString());
 //                                        params.put("sc_name", ListSpecificHelper.getSc_Name());
 //                                        params.put("cat_name", ListSpecificHelper.getCat_Name());
                                         return params;
@@ -259,16 +264,16 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                         cardViewYes.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String url = URLDatabase.URL_LIST_SPECIFIC_DELETE;
+                                String url = URLDatabase.URL_AY_DELETE;
                                 RequestQueue queue = Volley.newRequestQueue(context);
                                 StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         dialog.dismiss();
 
-                                        lShelper.remove(position);
+                                        genRepList.remove(position);
                                         notifyItemRemoved(position);
-                                        notifyItemRangeRemoved(position, lShelper.size());
+                                        notifyItemRangeRemoved(position, genRepList.size());
                                     }
                                 }, new com.android.volley.Response.ErrorListener() {
                                     @Override
@@ -286,10 +291,9 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                                     protected Map<String, String> getParams()
                                     {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        params.put("spc_d_cat", String.valueOf(ListSpecificHelper.getSpc_d_Cat()));
-                                        params.put("spc_d_name", ListSpecificHelper.getSpc_d_Name());
-                                        params.put("sc_name", ListSpecificHelper.getSc_Name());
-                                        params.put("cat_name", ListSpecificHelper.getCat_Name());
+                                        params.put("ay_id", String.valueOf(generateReportHelper.getAY_ID()));
+                                        params.put("ay_range", generateReportHelper.getAY_Range());
+                                        params.put("ay_status", generateReportHelper.getAY_Status());
                                         return params;
                                     }
                                 };
@@ -301,6 +305,7 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
                 });
 
                 dialog.show();
+
             }
         });
     }
@@ -313,36 +318,16 @@ public class ListSpecificAdapter extends RecyclerView.Adapter<ListSpecificAdapte
         }
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvAY_Range, tvAY_Status;
+        LinearLayout linearLayoutAY;
 
-    @Override
-    public int getItemCount() {
-        return lShelper.size();
-    }
-
-    @Override
-    public ListSpecificAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        View contactView = inflater.inflate(R.layout.list_specific_item_layout, parent, false);
-
-        ListSpecificAdapter.ViewHolder viewHolder = new ListSpecificAdapter.ViewHolder(contactView);
-
-        return viewHolder;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tvSpd_d_Name, tvSpc_d_Cat;
-        LinearLayout linearLayoutLS;
-
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            linearLayoutLS = itemView.findViewById(R.id.linearLayoutLS);
-            tvSpd_d_Name = itemView.findViewById(R.id.tvComplaintNameItem);
-            tvSpc_d_Cat = itemView.findViewById(R.id.tvSpc_d_Cat);
 
-
+            linearLayoutAY = itemView.findViewById(R.id.linearLayoutAY);
+            tvAY_Range = itemView.findViewById(R.id.tvAY_Range);
+            tvAY_Status = itemView.findViewById(R.id.tvAY_Status);
         }
     }
 }
