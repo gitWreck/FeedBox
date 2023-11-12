@@ -2,7 +2,8 @@ package com.example.feedbox;
 
 public class URLDatabase
 {
-    static String URLLH = "http://192.168.1.11/feedbox/";
+    //    static String URLLH = "http://192.168.1.11/feedbox/";
+    static String URLLH = "http://feedbox.000.pe/feedbox/";
     public static String URL_BAR_GRAPH = URLLH + "URL_BAR_GRAPH.php";
     public static String URL_AY_ACTIVE = URLLH + "URL_AY_ACTIVE.php";
     public static String URL_AY_ADD = URLLH + "URL_AY_ADD.php";
