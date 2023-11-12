@@ -44,6 +44,7 @@ public class AccountSettingActivity extends AppCompatActivity {
     CardView cardViewUpdate;
     String userTypeSelected;
     String Email;
+    int User_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,9 +206,19 @@ public class AccountSettingActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response)
                         {
-                            Intent intent= new Intent(AccountSettingActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finishAffinity();
+                            if(!txtASEmail.getText().toString().equals(Email)) {
+                                Toast.makeText(AccountSettingActivity.this, "Email has been changed", Toast.LENGTH_SHORT).show();
+                                SharedPreferences settings = getSharedPreferences("FeedBox", Context.MODE_PRIVATE);
+                                settings.edit().clear().commit();
+
+                                Intent intentOut = new Intent(AccountSettingActivity.this, LoginActivity.class);
+                                startActivity(intentOut);
+                                finishAffinity();
+                            } else {
+                                Intent intent= new Intent(AccountSettingActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finishAffinity();
+                            }
                         }
                     }, new com.android.volley.Response.ErrorListener() {
                         @Override
@@ -225,11 +236,12 @@ public class AccountSettingActivity extends AppCompatActivity {
                         protected Map<String, String> getParams()
                         {
                             Map<String, String> params = new HashMap<String, String>();
+                            params.put("user_id", String.valueOf(User_ID));
                             params.put("first_name", txtASFirstName.getText().toString());
                             params.put("last_name", txtASLastName.getText().toString());
                             params.put("up_email", txtASEmail.getText().toString());
                             params.put("password", txtPassword.getText().toString());
-                            params.put("email", Email);
+//                            params.put("email", Email);
                             return params;
                         }
                     };
@@ -245,8 +257,7 @@ public class AccountSettingActivity extends AppCompatActivity {
         LoadAccount();
     }
 
-    void LoadAccount()
-    {
+    void LoadAccount() {
         String url = URLDatabase.URL_HOME;
 
         RequestQueue queue = Volley.newRequestQueue(AccountSettingActivity.this);
@@ -263,12 +274,14 @@ public class AccountSettingActivity extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++)
                         {
                             JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+                            int user_id = jsonObjectData.getInt("user_id");
                             String firstName = jsonObjectData.getString("first_name");
                             String lastName = jsonObjectData.getString("last_name");
                             String Email = jsonObjectData.getString("email");
                             String UserType = jsonObjectData.getString("user_type");
                             String password = jsonObjectData.getString("password");
 //                            userTypeSelected = UserType;
+                            User_ID = user_id;
                             txtASPositon.setText(UserType);
                             txtASEmail.setText(Email);
                             txtASFirstName.setText(firstName);
@@ -277,9 +290,7 @@ public class AccountSettingActivity extends AppCompatActivity {
                             txtConfirmPassword.setText(password);
                         }
                     }
-
                 } catch (Exception e) {
-
                     Toast.makeText(AccountSettingActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

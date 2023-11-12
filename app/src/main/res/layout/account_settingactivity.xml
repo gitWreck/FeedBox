@@ -265,7 +265,6 @@
                         <EditText
                             android:inputType="textEmailAddress"
                             android:id="@+id/txtASEmail"
-                            android:focusable="false"
                             android:background="@null"
                             android:fontFamily="@font/cabin"
                             android:hint="Enter your email..."
