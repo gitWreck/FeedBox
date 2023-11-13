@@ -3,7 +3,8 @@ package com.example.feedbox;
 public class URLDatabase
 {
     //    static String URLLH = "http://192.168.1.11/feedbox/";
-    static String LINK_PHP = "http://feedbox.000.pe/";
+//    static String LINK_PHP = "http://feedbox.000.pe/";
+    static String LINK_PHP = "https://dysphoric-rheostat.000webhostapp.com/";
     public static String URL_BAR_GRAPH = LINK_PHP + "URL_BAR_GRAPH.php";
     public static String URL_AY_ACTIVE = LINK_PHP + "URL_AY_ACTIVE.php";
     public static String URL_AY_ADD = LINK_PHP + "URL_AY_ADD.php";
