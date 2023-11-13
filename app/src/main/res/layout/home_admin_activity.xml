@@ -393,6 +393,7 @@
                     android:layout_marginRight="10dp"
                     android:textSize="15dp"
                     android:text="Category: "
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Spinner
@@ -448,9 +449,11 @@
                     android:layout_marginRight="10dp"
                     android:textSize="15dp"
                     android:text="Sub Category: "
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <Spinner
+                    android:textColor="@color/black"
                     android:id="@+id/spinnerSelSubCat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

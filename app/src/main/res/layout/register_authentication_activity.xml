@@ -162,7 +162,7 @@
                 android:fontFamily="@font/baloobhai"
                 android:textSize="24sp"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textColorHint="@color/silver"
                 android:hint="0"
