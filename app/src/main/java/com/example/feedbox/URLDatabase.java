@@ -2,7 +2,7 @@ package com.example.feedbox;
 
 public class URLDatabase
 {
-    //    static String URLLH = "http://192.168.1.11/feedbox/";
+//        static String LINK_PHP = "http://192.168.1.13/feedbox/";
 //    static String LINK_PHP = "http://feedbox.000.pe/";
     static String LINK_PHP = "https://dysphoric-rheostat.000webhostapp.com/";
     public static String URL_BAR_GRAPH = LINK_PHP + "URL_BAR_GRAPH.php";
@@ -30,6 +30,7 @@ public class URLDatabase
     public static String URL_ADMIN_ADD = LINK_PHP + "URL_ADMIN_ADD.php";
     public static String URL_ADMIN_EDIT = LINK_PHP + "URL_ADMIN_EDIT.php";
     public static String URL_CATEGORY_LIST = LINK_PHP + "URL_CATEGORY_LIST.php";
+    public static String URL_CATEGORY_SUB_LIST = LINK_PHP + "URL_CATEGORY_SUB_LIST.php";
     public static String URL_CATEGORY_ADD = LINK_PHP + "URL_CATEGORY_ADD.php";
     public static String URL_CATEGORY_EDIT = LINK_PHP + "URL_CATEGORY_EDIT.php";
     public static String URL_CATEGORY_DELETE = LINK_PHP + "URL_CATEGORY_DELETE.php";
@@ -45,6 +46,7 @@ public class URLDatabase
     public static String URL_FEEDBACK_LIST_UPDATE = LINK_PHP + "URL_FEEDBACK_LIST_UPDATE.php";
     public static String URL_MONTHLY_SALES = LINK_PHP + "RL_MONTHLY_SALES.php";
     public static String URL_PIE_CHART_FEEDBACK = LINK_PHP + "URL_PIE_CHART_FEEDBACK.php";
+    public static String URL_PIE_SUB_CHART_FEEDBACK = LINK_PHP + "URL_PIE_SUB_CHART_FEEDBACK.php";
     public static String URL_USER_LIST = LINK_PHP + "URL_USER_LIST.php";
     public static String URL_USER_TYPE_LIST = LINK_PHP + "URL_USER_TYPE_LIST.php";
     public static String URL_USER_STATUS_EDIT = LINK_PHP + "URL_USER_STATUS_EDIT.php";

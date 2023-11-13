@@ -248,7 +248,6 @@ public class SendFeedbackActivity extends AppCompatActivity{
                                 Category = simpleArray[i];
 //                                if(Category.equals("Facilities")) {
                                 subCategories.clear();
-
                                 String url = URLDatabase.URL_SUB_CATEGORY_NAME_LIST;
                                 RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
                                 StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
