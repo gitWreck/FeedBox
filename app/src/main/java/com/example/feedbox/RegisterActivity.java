@@ -185,8 +185,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     if (userTypeSelected == "Student" || userTypeSelected == "Faculty/Administrator" && !txtEmail.getText().toString().contains("@bulsu.edu.ph")) {
 //                        Toast.makeText(RegisterActivity.this, "nice", Toast.LENGTH_SHORT).show();
 //                        SendRegistration();
-                        Toast.makeText(RegisterActivity.this, "Student and Faculty/Administrator must use @bulsu.edu.ph emails", Toast.LENGTH_SHORT).show();
-                    } else if (userTypeSelected != "Student" || userTypeSelected != "Faculty/Administrator") {
+                        if(txtEmail.getText().toString().contains("@bulsu.edu.ph")) {
+                            SendRegistration();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, userTypeSelected + " must use @bulsu.edu.ph emails", Toast.LENGTH_SHORT).show();
+                        }
+                        } else if (userTypeSelected != "Student" || userTypeSelected != "Faculty/Administrator") {
                         SendRegistration();
                     } else  {
                         SendRegistration();
