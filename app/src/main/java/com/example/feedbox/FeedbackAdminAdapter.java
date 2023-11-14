@@ -160,6 +160,8 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                                 @Override
                                 public void onResponse(String response) {
                                     Toast.makeText(context, "Email sent successfully to : " + FeedbackAdminHelper.getEmail(), Toast.LENGTH_SHORT).show();
+
+                                    EndProgLoad();
                                     dialog.dismiss();
                                 }
                             }, new com.android.volley.Response.ErrorListener() {
@@ -184,7 +186,6 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                                 }
                             };
                             queue.add(request);
-                            EndProgLoad();
                         }
                     });
 
@@ -295,6 +296,9 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                             btnSendGmail.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    progressDialog.setMessage("Sending...");
+                                    progressDialog.show();
+
                                     String url = URLDatabase.URL_SEND_FEEDBACK_EMAIL;
 
                                     RequestQueue queue = Volley.newRequestQueue(context);
@@ -302,6 +306,9 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
                                     StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
+                                            Toast.makeText(context, "Email sent successfully to : " + FeedbackAdminHelper.getEmail(), Toast.LENGTH_SHORT).show();
+
+                                            EndProgLoad();
                                             dialog.dismiss();
                                         }
                                     }, new com.android.volley.Response.ErrorListener() {
