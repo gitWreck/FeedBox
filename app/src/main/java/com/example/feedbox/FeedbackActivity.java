@@ -154,9 +154,14 @@ public class FeedbackActivity extends AppCompatActivity {
                                 String status = jsonObjectData.getString("status");
                                 String subStatus = jsonObjectData.getString("sub_status");
                                 String datePosted = jsonObjectData.getString("date_posted");
+
+                                String details = jsonObjectData.getString("details");
+                                String subdetails = jsonObjectData.getString("sub_details");
+                                String reasons = jsonObjectData.getString("what_happened");
 //                                fullName,
                                 feedbackHelpers.add(new FeedbackHelper(feedbackID, firstName, lastName,
-                                        email,categoryName,subCategoryName,sentiment,description,status,subStatus,datePosted));
+                                        email,categoryName,subCategoryName,sentiment,description,status,subStatus,datePosted,
+                                        details, subdetails, reasons));
                             }
 
                             catch (Exception err)

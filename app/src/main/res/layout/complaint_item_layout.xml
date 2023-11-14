@@ -81,6 +81,22 @@
 
                 </TextView>
 
+                <TextView
+                    android:id="@+id/tvUID"
+                    android:gravity="right"
+                    android:layout_marginRight="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/baloobhai"
+                    android:text="UID"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
             </LinearLayout>
 
             <ImageView
@@ -160,7 +176,6 @@
 
             </TextView>
         </LinearLayout>
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -189,6 +204,111 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:text="Sub Category Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvDetails"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Sub Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvSubDetails"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Sub Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvReasonsLbl"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Reasons"
+
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvReasons"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/baloobhai"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Reasons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 

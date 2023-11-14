@@ -79,6 +79,8 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
         if(FeedbackHelper.getSentiment().equals("Like"))
         {
             holder.imgSentiment.setImageTintList(context.getColorStateList(R.color.emerald));
+            holder.tvReasons.setVisibility(View.GONE);
+            holder.tvReasonsLbl.setVisibility(View.GONE);
         }
         else
         {
@@ -87,6 +89,11 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
         }
 
 //        holder.tvFullName.setText(FeedbackHelper.getFullName());
+        holder.tvDetails.setText(FeedbackHelper.getDetails());
+        holder.tvSubDetails.setText(FeedbackHelper.getSubDetails());
+        holder.tvReasons.setText(FeedbackHelper.getReasons());
+        holder.tvfBID.setText(FeedbackHelper.getFeedBackID());
+
         holder.tvFirstName.setText(FeedbackHelper.getFirstName());
         holder.tvLastName.setText(FeedbackHelper.getLastName());
         holder.tvStatus.setText(FeedbackHelper.getStatus());
@@ -121,13 +128,21 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView tvFullName, tvFirstName, tvLastName, tvStatus, tvCategoryName, tvSubCategoryName, tvDescription, tvDatePosted;
+        TextView tvFullName, tvFirstName, tvLastName, tvStatus, tvCategoryName, tvSubCategoryName, tvDescription, tvDatePosted,
+                tvDetails, tvSubDetails, tvReasons, tvReasonsLbl, tvfBID;
         ImageView imgSentiment;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
 //            tvFullName = itemView.findViewById(R.id.tvFullName);
+            tvfBID = itemView.findViewById(R.id.tvUID);
+
+            tvDetails = itemView.findViewById(R.id.tvDetails);
+            tvSubDetails = itemView.findViewById(R.id.tvSubDetails);
+            tvReasons = itemView.findViewById(R.id.tvReasons);
+            tvReasonsLbl = itemView.findViewById(R.id.tvReasonsLbl);
+
             tvFirstName = itemView.findViewById(R.id.tvFirstName);
             tvLastName = itemView.findViewById(R.id.tvLastName);
             tvStatus = itemView.findViewById(R.id.tvStatus);

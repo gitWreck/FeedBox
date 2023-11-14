@@ -294,12 +294,16 @@ public class ComplaintActivity extends AppCompatActivity {
                                 String subCategoryName = jsonObjectData.getString("sub_category_name");
                                 String sentiment = jsonObjectData.getString("sentiment");
                                 String description = jsonObjectData.getString("description");
-                                String status = jsonObjectData.getString("status");
+                                String status = jsonObjectData.getString("status");  
                                 String subStatus = jsonObjectData.getString("sub_status");
                                 String datePosted = jsonObjectData.getString("date_posted");
+
+                                String details = jsonObjectData.getString("details");
+                                String subdetails = jsonObjectData.getString("sub_details");
+                                String reasons = jsonObjectData.getString("what_happened");
 //                                fullName,
                                 feedbackAdminHelpers.add(new FeedbackAdminHelper(feedbackID, firstName, lastName,
-                                        email, categoryName, subCategoryName, sentiment, description, status, subStatus, datePosted));
+                                        email, categoryName, subCategoryName, sentiment, description, status, subStatus, datePosted, details, subdetails, reasons));
                             }
 
                             catch (Exception err)

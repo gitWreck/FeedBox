@@ -29,6 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -90,6 +91,8 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
         if(FeedbackAdminHelper.getSentiment().equals("Like"))
         {
             holder.imgSentiment.setImageTintList(context.getColorStateList(R.color.emerald));
+            holder.tvReasons.setVisibility(View.GONE);
+            holder.tvReasonsLbl.setVisibility(View.GONE);
         }
         else
         {
@@ -105,6 +108,11 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
         holder.tvSubCategoryName.setText(FeedbackAdminHelper.getSubCategoryName());
         holder.tvDescription.setText(FeedbackAdminHelper.getDescription());
         holder.tvDatePosted.setText(FeedbackAdminHelper.getDatePosted());
+
+        holder.tvDetails.setText(FeedbackAdminHelper.getDetails());
+        holder.tvSubDetails.setText(FeedbackAdminHelper.getSubDetails());
+        holder.tvReasons.setText(FeedbackAdminHelper.getReasons());
+        holder.tvfBID.setText(FeedbackAdminHelper.getFeedBackID());
 
         if(FeedbackAdminHelper.getStatus().equals("Pending"))
         {
@@ -252,44 +260,78 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
 
                     tvEmail.setText("Email: " + FeedbackAdminHelper.getEmail());
 
-                    linearLayoutEmail.setVisibility(View.GONE);
+//                    linearLayoutEmail.setVisibility(View.GONE);
 
                     linearLayoutEmail.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
                         public void onClick(View view)
                         {
-                            String url = URLDatabase.URL_SEND_FEEDBACK_EMAIL;
+                            Dialog dialog = new Dialog(context);
 
-                            RequestQueue queue = Volley.newRequestQueue(context);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(true);
+                            dialog.setCanceledOnTouchOutside(true);
+                            dialog.setContentView(R.layout.send_gmail);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            Window window = dialog.getWindow();
+                            WindowManager.LayoutParams wlp = window.getAttributes();
 
-                            StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    dialog.dismiss();
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error)
-                                {
-                                    Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }) {
-                                @Override
-                                public String getBodyContentType() {
-                                    return "application/x-www-form-urlencoded; charset=UTF-8";
-                                }
+                            wlp.gravity = Gravity.BOTTOM;
 
+                            window.setAttributes(wlp);
+
+                            TextView tvEmail;
+                            EditText etBod, etSub;
+                            CardView btnSendGmail;
+
+                            etBod = dialog.findViewById(R.id.etEMBod);
+                            etSub = dialog.findViewById(R.id.etEMSub);
+                            tvEmail = dialog.findViewById(R.id.UserEmail);
+                            btnSendGmail = dialog.findViewById(R.id.cvSendGmail);
+
+                            tvEmail.setText(FeedbackAdminHelper.getEmail());
+                            btnSendGmail.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                protected Map<String, String> getParams()
-                                {
-                                    Map<String, String> params = new HashMap<String, String>();
-                                    params.put("email", FeedbackAdminHelper.getEmail());
-                                    params.put("feedback_id", FeedbackAdminHelper.getFeedBackID());
-                                    return params;
+                                public void onClick(View view) {
+                                    String url = URLDatabase.URL_SEND_FEEDBACK_EMAIL;
+
+                                    RequestQueue queue = Volley.newRequestQueue(context);
+
+                                    StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            dialog.dismiss();
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error)
+                                        {
+                                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }) {
+                                        @Override
+                                        public String getBodyContentType() {
+                                            return "application/x-www-form-urlencoded; charset=UTF-8";
+                                        }
+
+                                        @Override
+                                        protected Map<String, String> getParams()
+                                        {
+                                            Map<String, String> params = new HashMap<String, String>();
+                                            params.put("email", FeedbackAdminHelper.getEmail());
+                                            params.put("etSub", etSub.getText().toString());
+                                            params.put("etBod", etBod.getText().toString());
+//                                            params.put("feedback_id", FeedbackAdminHelper.getFeedBackID());
+                                            return params;
+                                        }
+                                    };
+                                    queue.add(request);
                                 }
-                            };
-                            queue.add(request);
+                            });
+                            dialog.show();
+
                         }
                     });
 
@@ -365,12 +407,20 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         CardView cardViewUpdate;
-        TextView tvFullName, tvFirstName, tvLastName, tvStatus, tvCategoryName, tvSubCategoryName, tvDescription, tvDatePosted, tvUpdate;
+        TextView tvFullName, tvFirstName, tvLastName, tvStatus, tvCategoryName, tvSubCategoryName, tvDescription, tvDatePosted, tvUpdate,
+            tvDetails, tvSubDetails, tvReasons, tvReasonsLbl, tvfBID;
         ImageView imgSentiment;
         public ViewHolder(View itemView) {
             super(itemView);
 
 //            tvFullName = itemView.findViewById(R.id.tvFullName);
+            tvfBID = itemView.findViewById(R.id.tvUID);
+
+            tvDetails = itemView.findViewById(R.id.tvDetails);
+            tvSubDetails = itemView.findViewById(R.id.tvSubDetails);
+            tvReasons = itemView.findViewById(R.id.tvReasons);
+            tvReasonsLbl = itemView.findViewById(R.id.tvReasonsLbl);
+
             tvFirstName = itemView.findViewById(R.id.tvFirstName);
             tvLastName = itemView.findViewById(R.id.tvLastName);
             tvStatus = itemView.findViewById(R.id.tvStatus);

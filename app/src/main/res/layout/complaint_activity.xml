@@ -86,7 +86,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="Complaint"
+        android:text="Feedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 

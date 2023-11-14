@@ -2,7 +2,7 @@ package com.example.feedbox;
 
 public class FeedbackHelper
 {
-    String FeedBackID, FirstName, LastName,
+    String FeedBackID, FirstName, LastName, Details, SubDetails, Reasons,
 //            FullName,
             Email, CategoryName, SubCategoryName, Sentiment, Description, Status, SubStatus, DatePosted;
 
@@ -10,7 +10,19 @@ public class FeedbackHelper
         return FeedBackID;
     }
 
-//    public String getFullName() {
+    public String getReasons() {
+        return Reasons;
+    }
+
+    public String getDetails() {
+        return Details;
+    }
+
+    public String getSubDetails() {
+        return SubDetails;
+    }
+
+    //    public String getFullName() {
 //        return FullName;
 //    }
     public String getFirstName() {
@@ -53,7 +65,9 @@ public class FeedbackHelper
 
     public FeedbackHelper(String feedBackID, String firstName, String lastName,
 //                          String fullName,
-                          String email, String categoryName, String subCategoryName, String sentiment, String description, String status, String subStatus, String datePosted) {
+                          String email, String categoryName, String subCategoryName, String sentiment, String description, String status, String subStatus, String datePosted,
+                          String details, String subdetais, String reasons
+                          ) {
         FeedBackID = feedBackID;
         FirstName = firstName;
         LastName = lastName;
@@ -66,5 +80,8 @@ public class FeedbackHelper
         Status = status;
         SubStatus = subStatus;
         DatePosted = datePosted;
+        Details = details;
+        SubDetails = subdetais;
+        Reasons = reasons;
     }
 }
