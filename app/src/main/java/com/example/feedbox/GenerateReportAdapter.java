@@ -103,7 +103,14 @@ public class GenerateReportAdapter extends RecyclerView.Adapter<GenerateReportAd
                 linearLayoutView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        ((Activity)context).finish();
+                        String uri = Uri.parse(URLDatabase.URL_REPORT)
+                                .buildUpon()
+                                .appendQueryParameter("ay_range", generateReportHelper.getAY_Range())
+                                .build().toString();
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//                        Intent intent= new Intent(context, GenerateReportActivity.class);
+                        ((Activity)context).startActivity(browserIntent);
 //                        Uri authUri = Uri.parse(URLDatabase.LINK_PHP)
 //                            .buildUpon()
 //                            .appendQueryParameter("ay_range", generateReportHelper.getAY_Range())
