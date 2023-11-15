@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -31,6 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +96,20 @@ public class GenerateReportAdapter extends RecyclerView.Adapter<GenerateReportAd
                 linearLayoutEdit = dialog.findViewById(R.id.linearLayoutEdit);
                 linearLayoutDelete = dialog.findViewById(R.id.linearLayoutDelete);
 
-                linearLayoutView.setVisibility(View.GONE);
+                linearLayoutView.setVisibility(View.VISIBLE);
                 linearLayoutEdit.setVisibility(View.VISIBLE);
                 linearLayoutDelete.setVisibility(View.VISIBLE);
+
+                linearLayoutView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+//                        Uri authUri = Uri.parse(URLDatabase.LINK_PHP)
+//                            .buildUpon()
+//                            .appendQueryParameter("ay_range", generateReportHelper.getAY_Range())
+//                            .build();
+                    }
+                });
                 linearLayoutEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
