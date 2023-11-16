@@ -140,12 +140,12 @@ public class CategoryActivity extends AppCompatActivity {
                     }
                 });
 
-                linearLayoutBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+//                linearLayoutBack.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//                    }
+//                });
 
                 cardViewSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override

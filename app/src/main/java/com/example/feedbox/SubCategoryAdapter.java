@@ -125,8 +125,6 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
                     }
                 });
 
-
-
                 linearLayoutEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

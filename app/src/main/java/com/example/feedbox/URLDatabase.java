@@ -38,7 +38,7 @@ public class URLDatabase
     public static String URL_SUB_CATEGORY_LIST = LINK_PHP + "URL_SUB_CATEGORY_LIST.php";
     public static String URL_SUB_CATEGORY_ADD = LINK_PHP + "URL_SUB_CATEGORY_ADD.php";
     public static String URL_SUB_CATEGORY_EDIT = LINK_PHP + "URL_SUB_CATEGORY_EDIT.php";
-    public static String URL_SUB_CATEGORY_DELETE = LINK_PHP + "RL_SUB_CATEGORY_DELETE.php";
+    public static String URL_SUB_CATEGORY_DELETE = LINK_PHP + "URL_SUB_CATEGORY_DELETE.php";
     public static String URL_SUB_CATEGORY_NAME_LIST = LINK_PHP + "URL_SUB_CATEGORY_NAME_LIST.php";
     public static String URL_SEND_FEEDBACK = LINK_PHP + "URL_SEND_FEEDBACK.php";
     public static String URL_FEEDBACK_ADMIN_LIST = LINK_PHP + "URL_FEEDBACK_ADMIN_LIST.php";

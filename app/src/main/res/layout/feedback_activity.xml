@@ -156,6 +156,14 @@
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="Empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></TextView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

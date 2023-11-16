@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,6 +51,16 @@ public class HomeActivity extends AppCompatActivity {
     String Slide, Email;
     CardView cardViewClickHere;
     Boolean AllowSendFeed = null;
+
+    ProgressDialog progressDialog;
+
+    private void EndProgLoad(){
+        if(progressDialog!=null && progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +72,10 @@ public class HomeActivity extends AppCompatActivity {
         tvGuideline = findViewById(R.id.tvGuideline);
         tvFullName = findViewById(R.id.tvFullName);
         cardViewClickHere = findViewById(R.id.cardViewClickHere);
+
+        progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setCancelable(false);
+
 
         SharedPreferences sh = getSharedPreferences("FeedBox", Context.MODE_PRIVATE);
 
@@ -114,7 +129,10 @@ public class HomeActivity extends AppCompatActivity {
         cardViewClickHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
                 CheckBlockedStatus();
+
             }
         });
 
@@ -170,8 +188,7 @@ public class HomeActivity extends AppCompatActivity {
         LoadAccount();
     }
 
-    void LoadAccount()
-    {
+    void LoadAccount() {
 
         String url = URLDatabase.URL_HOME;
 
@@ -308,6 +325,7 @@ public class HomeActivity extends AppCompatActivity {
                     });
 
                     dialog.show();
+                    EndProgLoad();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {

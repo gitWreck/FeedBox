@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -42,6 +43,8 @@ public class FeedbackActivity extends AppCompatActivity {
 
     Chip chipPending, chipInProgress, chipCompleted;
     Chip chipLike, chipDislike;
+
+    TextView tvEmpty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,8 @@ public class FeedbackActivity extends AppCompatActivity {
 
         linearLayoutBack = findViewById(R.id.linearLayoutBack);
         recyclerView = findViewById(R.id.recyclerView);
+        tvEmpty = findViewById(R.id.tvEmpty);
+        tvEmpty.setVisibility(View.GONE);
 
         chipPending = findViewById(R.id.chipPending);
         chipInProgress = findViewById(R.id.chipInProgress);
@@ -130,15 +135,13 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
+                    if(!response.equals("[]")) {
                         feedbackHelpers.clear();
 
                         JSONObject jsonObject = new JSONObject(response);
 
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for(int i = 0; i < jsonArray.length(); i++)
-                        {
+                        for(int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 JSONObject jsonObjectData = jsonArray.getJSONObject(i);
 
@@ -162,20 +165,18 @@ public class FeedbackActivity extends AppCompatActivity {
                                 feedbackHelpers.add(new FeedbackHelper(feedbackID, firstName, lastName,
                                         email,categoryName,subCategoryName,sentiment,description,status,subStatus,datePosted,
                                         details, subdetails, reasons));
-                            }
-
-                            catch (Exception err)
-                            {
+                            } catch (Exception err) {
 //                                Toast.makeText(FeedbackActivity.this, "dAWDW", Toast.LENGTH_SHORT).show();
                                 Toast.makeText(FeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
+                        tvEmpty.setVisibility(View.GONE);
                         recyclerView.setAdapter(feedbackAdapter);
+                    } else {
+                        tvEmpty.setVisibility(View.VISIBLE);
                     }
-
                 } catch (Exception e) {
-
+                    tvEmpty.setVisibility(View.VISIBLE);
                     Toast.makeText(FeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

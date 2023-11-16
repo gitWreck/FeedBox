@@ -3,6 +3,7 @@ package com.example.feedbox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,13 +35,19 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText txtEmail, txtPassword;
     CardView cardViewLogin;
-
     TextView tvRegister, tvForPass;
-
     TextView tvShowHide, tvLoginAdmin;
-
     String UserLevel;
     String Email;
+    ProgressDialog progressDialog;
+
+
+    private void EndProgLoad(){
+        if(progressDialog!=null && progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         txtEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -116,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                 LoginChecker();
             }
         });
-
         txtPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -133,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                 LoginChecker();
             }
         });
-
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,13 +152,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setCancelable(false);
 
-
-        cardViewLogin.setOnClickListener(new View.OnClickListener()
-        {
+        cardViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
+
                 String url = URLDatabase.URL_LOGIN;
 
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -209,11 +215,13 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
+                        EndProgLoad();
                     }
                 }, new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
+                        EndProgLoad();
                         Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }) {

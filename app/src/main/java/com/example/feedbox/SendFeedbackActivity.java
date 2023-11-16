@@ -4,14 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -71,6 +77,15 @@ public class SendFeedbackActivity extends AppCompatActivity{
     private long mLastClickTime = 0;
 
     CardView cardViewWhatHappened;
+
+    ProgressDialog progressDialog;
+
+    private void EndProgLoad(){
+        if(progressDialog!=null && progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +127,9 @@ public class SendFeedbackActivity extends AppCompatActivity{
         cardViewSubmit.setClickable(true);
         cardViewSubmit.setFocusable(true);
         cardViewSubmit.setAlpha(1.0f);
+
+        progressDialog = new ProgressDialog(SendFeedbackActivity.this);
+        progressDialog.setCancelable(false);
 
         txtDescription.addTextChangedListener(new TextWatcher() {
             @Override
@@ -160,52 +178,100 @@ public class SendFeedbackActivity extends AppCompatActivity{
         cardViewSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dialog dialog = new Dialog(SendFeedbackActivity.this);
 
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.delete_confirmation_layout);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams wlp = window.getAttributes();
 
-                String url = URLDatabase.URL_SEND_FEEDBACK;
+                wlp.gravity = Gravity.BOTTOM;
 
-                RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+                window.setAttributes(wlp);
 
-                StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                TextView tvMsgConfirm, tvcbcancel, tvcbconfirm;
+                CardView cvNo, cvYes;
+
+                tvMsgConfirm = dialog.findViewById(R.id.tvMessageConfirm);
+                tvcbcancel = dialog.findViewById(R.id.cbcancel);
+                tvcbconfirm = dialog.findViewById(R.id.cbconfirm);
+
+                cvNo = dialog.findViewById(R.id.cardViewNo);
+                cvYes = dialog.findViewById(R.id.cardViewYes);
+
+                tvcbconfirm.setText("Confirm");
+                tvcbcancel.setText("Cancel");
+                tvMsgConfirm.setText("Confirm send feedback");
+
+
+                cvYes.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResponse(String response)
-                    {
-//                        Toast.makeText(SendFeedbackActivity.this, "Feedback sent successfully...", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-                    @Override
-                    public String getBodyContentType() {
-                        return "application/x-www-form-urlencoded; charset=UTF-8";
-                    }
+                    public void onClick(View view) {
+                        progressDialog.setMessage("Sending...");
+                        progressDialog.show();
 
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("email", Email);
-                        params.put("category_name", Category);
-                        params.put("sub_category_name", SubCategory);
-                        params.put("details", Details);
-                        params.put("sub_details", SubDetails);
-                        params.put("what_happened", WhatHappened);
-                        params.put("sentiment", Feedback);
-                        params.put("description", txtDescription.getText().toString());
-                        params.put("ay_range", tvActiveAY.getText().toString());
-                        return params;
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
+                        String url = URLDatabase.URL_SEND_FEEDBACK;
+
+                        RequestQueue queue = Volley.newRequestQueue(SendFeedbackActivity.this);
+
+                        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                EndProgLoad();
+                                Toast.makeText(SendFeedbackActivity.this, "Feedback sent successfully...", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+//                                finish();
+                            }
+                        }, new com.android.volley.Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                EndProgLoad();
+                                Toast.makeText(SendFeedbackActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/x-www-form-urlencoded; charset=UTF-8";
+                            }
+
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("email", Email);
+                                params.put("category_name", Category);
+                                params.put("sub_category_name", SubCategory);
+                                params.put("details", Details);
+                                params.put("sub_details", SubDetails);
+                                params.put("what_happened", WhatHappened);
+                                params.put("sentiment", Feedback);
+                                params.put("description", txtDescription.getText().toString());
+                                params.put("ay_range", tvActiveAY.getText().toString());
+                                return params;
+                            }
+                        };
+                        queue.add(request);
                     }
-                };
-                queue.add(request);
+                });
+
+                cvNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
