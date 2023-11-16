@@ -183,7 +183,9 @@
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitXY"
-            android:src="@drawable/bulsu_logo"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/logo_bulsu"
             android:layout_width="100dp"
             android:layout_height="100dp">
 

@@ -174,6 +174,7 @@ public class SendFeedbackActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(String response)
                     {
+//                        Toast.makeText(SendFeedbackActivity.this, "Feedback sent successfully...", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }, new com.android.volley.Response.ErrorListener() {
@@ -320,11 +321,18 @@ public class SendFeedbackActivity extends AppCompatActivity{
                                                                                 what_happened.add(spc_d_name);
                                                                             }
 
-                                                                            loadListSpecific();
+//                                                                            loadListSpecific();
                                                                         } catch (Exception err) {
+//                                                                            details.clear();
+//                                                                            sub_details.clear();
+//                                                                            what_happened.clear();
+
+//                                                                            loadListSpecific();
                                                                             Toast.makeText(SendFeedbackActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     }
+
+                                                                    loadListSpecific();
 
 
                                                                 } catch (Exception err) {
