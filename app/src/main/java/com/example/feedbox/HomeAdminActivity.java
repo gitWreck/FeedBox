@@ -110,8 +110,6 @@ public class HomeAdminActivity extends AppCompatActivity {
         linearLayoutReport = findViewById(R.id.linearLayoutReport);
         imgViewLogout = findViewById(R.id.imgViewLogout);
 
-
-
         tvTotalFeedbacks = findViewById(R.id.tvTotalFeedbacks);
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
 

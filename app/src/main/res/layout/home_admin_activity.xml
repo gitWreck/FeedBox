@@ -478,6 +478,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:text="Summary of Negative Reasons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -498,6 +499,7 @@
             </TextView>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
