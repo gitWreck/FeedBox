@@ -487,6 +487,7 @@
 
             <TextView
                 android:id="@+id/tvSentimentCount"
+                android:visibility="gone"
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/cabin"
                 android:textSize="15sp"
