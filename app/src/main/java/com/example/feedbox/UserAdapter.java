@@ -102,8 +102,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
 
-        holder.imgBTNMuteUser.setOnClickListener(new View.OnClickListener()
-        {
+        holder.imgBTNMuteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -131,11 +130,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
 
                 tvEmail.setText(UserHelper.getEmail());
 
-                linearLayoutMuteUser.setOnClickListener(new View.OnClickListener()
-                {
+                linearLayoutMuteUser.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view)
-                    {
+                    public void onClick(View view) {
                         progressDialog.setMessage("Sending...");
                         progressDialog.show();
                         if(MuteCount < 3) {
@@ -149,13 +146,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
                         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-
                                 Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                             }
                         }, new com.android.volley.Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error)
-                            {
+                            public void onErrorResponse(VolleyError error) {
                                 Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }) {
