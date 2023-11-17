@@ -35,10 +35,11 @@
             </ImageView>
 
             <LinearLayout
+                android:gravity="center|left"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
 <!--                <TextView-->
 <!--                    android:id="@+id/tvFullName"-->
@@ -80,21 +81,48 @@
                     android:textStyle="bold">
 
                 </TextView>
+                <LinearLayout
 
-                <TextView
-                    android:id="@+id/tvUID"
-                    android:gravity="right"
-                    android:layout_marginRight="0dp"
+                    android:gravity="center|end"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="@font/baloobhai"
-                    android:text="UID"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold">
+                    android:layout_height="match_parent"
+>
+                    <TextView
+                        android:gravity="right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/baloobhai"
+                        android:text="ID: "
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold">
 
-                </TextView>
+                    </TextView>
+                    <TextView
+                        android:id="@+id/tvUID"
+                        android:gravity="right"
+                        android:layout_marginRight="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:fontFamily="@font/baloobhai"
+                        android:text="UID"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+                    <ImageView
+                        android:layout_marginRight="20dp"
+                        android:id="@+id/imgCopy"
+                        android:layout_gravity="center"
+                        android:src="@drawable/complaint_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp">
+
+                    </ImageView>
+                </LinearLayout>
 
 
             </LinearLayout>

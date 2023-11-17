@@ -3,15 +3,22 @@ package com.example.feedbox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -38,7 +45,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     LinearLayout linearLayoutBack;
     Spinner ddUTSpinner;
     CardView cardViewRegister;
-    String userTypeSelected;
+    String userTypeSelected, SelectAgreement;
+    CheckBox cbTPP;
     EditText txtFirstName, txtLastName, txtEmail, txtPassword, txtConfirmPassword;
     TextView tvShowHide, tvConfirmShowHide;
 
@@ -46,6 +54,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
+
+        SelectAgreement = null;
 
         ddUTSpinner = findViewById(R.id.spnUserType);
         ddUTSpinner.setOnItemSelectedListener(this);
@@ -71,6 +81,56 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         txtConfirmPassword = findViewById(R.id.txtConfirmPassword);
         tvShowHide = findViewById(R.id.tvShowHide);
         tvConfirmShowHide = findViewById(R.id.tvConfirmShowHide);
+
+        cbTPP = findViewById(R.id.cbTPP);
+
+        cbTPP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    Dialog dialog = new Dialog(RegisterActivity.this);
+
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setContentView(R.layout.terms_and_privacy_policy_layout);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    Window window = dialog.getWindow();
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+
+                    window.setAttributes(wlp);
+                    CardView cvDisagree, cvAgree;
+                    cvDisagree = dialog.findViewById(R.id.cardViewDisagree);
+                    cvAgree = dialog.findViewById(R.id.cardViewAgree);
+
+                    cvAgree.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            SelectAgreement = "Agree";
+                            RegisterButtonWatcher();
+                            dialog.dismiss();
+                        }
+                    });
+                    cvDisagree.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            SelectAgreement = "Disagree";
+                            cbTPP.setChecked(false);
+                            RegisterButtonWatcher();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                } else {
+                    SelectAgreement = "Disagree";
+                    RegisterButtonWatcher();
+                }
+            }
+        });
 
         tvShowHide.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,8 +236,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        cardViewRegister.setOnClickListener(new View.OnClickListener()
-        {
+        cardViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -282,7 +341,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if(txtFirstName.getText().toString().isEmpty() ||
                 txtEmail.getText().toString().isEmpty() ||
                 txtPassword.getText().toString().isEmpty() ||
-                txtConfirmPassword.getText().toString().isEmpty())
+                txtConfirmPassword.getText().toString().isEmpty()
+                        || SelectAgreement != "Agree")
         {
             cardViewRegister.setAlpha(0.2f);
             cardViewRegister.setFocusable(false);

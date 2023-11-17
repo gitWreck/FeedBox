@@ -10,10 +10,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -51,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     String Slide, Email;
     CardView cardViewClickHere;
     Boolean AllowSendFeed = null;
+    ImageView imgViewPicture;
 
     ProgressDialog progressDialog;
 
@@ -66,7 +70,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
 
-        imgView = findViewById(R.id.imgView);
+        imgViewPicture = findViewById(R.id.imgViewPicture);
         linearLayoutFeedback = findViewById(R.id.linearLayoutFeedback);
         linearLayoutSetting = findViewById(R.id.linearLayoutSetting);
         tvGuideline = findViewById(R.id.tvGuideline);
@@ -207,15 +211,15 @@ public class HomeActivity extends AppCompatActivity {
                         {
                             JSONObject jsonObjectData = jsonArray.getJSONObject(i);
                             String firstName = jsonObjectData.getString("first_name");
-//                            String lastName = jsonObjectData.getString("last_name");
-                            //String picture = jsonObjectData.getString("picture");
+                            String lastName = jsonObjectData.getString("last_name");
+                            String picture = jsonObjectData.getString("picture");
 
-                            /*if(!picture.equals("null"))
+                            if(!picture.equals("null"))
                             {
                                 byte[] decodedString = Base64.decode(picture, Base64.DEFAULT);
                                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                                 imgViewPicture.setImageBitmap(decodedByte);
-                            }*/
+                            }
 
                             tvFullName.setText("Hey " + firstName + "!");
                         }

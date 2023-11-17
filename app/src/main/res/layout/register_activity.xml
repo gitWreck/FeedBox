@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".RegisterActivity">
 
-
     <LinearLayout
         android:clickable="true"
         android:focusable="true"
@@ -55,460 +54,475 @@
 
     </TextView>
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/account_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
-
-            </ImageView>
-
+            android:layout_height="match_parent">
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Select User"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </TextView>
-
-                <Spinner
-                    android:id="@+id/spnUserType"
-                    android:background="@null"
-                    android:fontFamily="@font/cabin"
-                    android:textSize="10sp"
-
-                    android:textColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:prompt="@string/UTspn"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/account_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
-
-            </ImageView>
-
-            <LinearLayout
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="First Name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </TextView>
-
-                <EditText
-                    android:id="@+id/txtFirstName"
-                    android:background="@null"
-                    android:fontFamily="@font/cabin"
-                    android:hint="Enter your full name..."
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
+                >
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </EditText>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/account_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                        </ImageView>
 
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/account_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-            </ImageView>
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="Select User"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                            </TextView>
 
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Last Name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                            <Spinner
+                                android:id="@+id/spnUserType"
+                                android:background="@null"
+                                android:fontFamily="@font/cabin"
+                                android:textSize="10sp"
 
-                </TextView>
+                                android:textColor="@color/black"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:prompt="@string/UTspn"
+                                />
 
-                <EditText
-                    android:id="@+id/txtLastName"
-                    android:background="@null"
-                    android:fontFamily="@font/cabin"
-                    android:hint="Enter your full name..."
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </EditText>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/account_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                        </ImageView>
 
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/email_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-            </ImageView>
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="First Name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                            </TextView>
 
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/txtFirstName"
+                                android:background="@null"
+                                android:fontFamily="@font/cabin"
+                                android:hint="Enter your full name..."
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                </TextView>
+                            </EditText>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                <EditText
-                    android:inputType="text"
-                    android:id="@+id/txtEmail"
-                    android:background="@null"
-                    android:fontFamily="@font/cabin"
-                    android:hint="Enter your email..."
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </EditText>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/account_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                        </ImageView>
 
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/password_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-            </ImageView>
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="Last Name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                            </TextView>
 
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Password"
-                    android:layout_width="wrap_content"
+                            <EditText
+                                android:id="@+id/txtLastName"
+                                android:background="@null"
+                                android:fontFamily="@font/cabin"
+                                android:hint="Enter your full name..."
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </TextView>
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/email_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
+
+                        </ImageView>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="Email"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                            </TextView>
+
+                            <EditText
+                                android:inputType="text"
+                                android:id="@+id/txtEmail"
+                                android:background="@null"
+                                android:fontFamily="@font/cabin"
+                                android:hint="Enter your email..."
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/password_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
+
+                        </ImageView>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="Password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                            </TextView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:layout_weight="1"
+                                    android:id="@+id/txtPassword"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:fontFamily="@font/cabin"
+                                    android:hint="Enter your password..."
+                                    android:inputType="textPassword"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp">
+
+                                </EditText>
+
+                                <TextView
+                                    android:background="?attr/selectableItemBackground"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:id="@+id/tvShowHide"
+                                    android:fontFamily="@font/cabin"
+                                    android:textSize="15sp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:text="SHOW"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                </TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/pal1"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginBottom="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10sp"
+                            android:src="@drawable/password_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
+
+                        </ImageView>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="@font/cabin"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:text="Confirm Password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                            </TextView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:layout_weight="1"
+                                    android:inputType="textPassword"
+                                    android:id="@+id/txtConfirmPassword"
+                                    android:background="@null"
+                                    android:fontFamily="@font/cabin"
+                                    android:hint="Confirm your password..."
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                </EditText>
+
+                                <TextView
+                                    android:background="?attr/selectableItemBackground"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:id="@+id/tvConfirmShowHide"
+                                    android:fontFamily="@font/cabin"
+                                    android:textSize="15sp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:text="SHOW"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                </TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <EditText
-                        android:layout_weight="1"
-                        android:id="@+id/txtPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:fontFamily="@font/cabin"
-                        android:hint="Enter your password..."
-                        android:inputType="textPassword"
-                        android:textColor="@color/black"
-                        android:textSize="14sp">
-
-                    </EditText>
-
-                    <TextView
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/tvShowHide"
-                        android:fontFamily="@font/cabin"
-                        android:textSize="15sp"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="SHOW"
+                    <CheckBox
+                        android:id="@+id/cbTPP"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </CheckBox>
+                    <TextView
+                        android:id="@+id/tvTPP"
+                        android:text="Terms and Privacy Policy"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                     </TextView>
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/pal1"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_marginEnd="10sp"
-                android:src="@drawable/password_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
-
-            </ImageView>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:fontFamily="@font/cabin"
-                    android:textSize="15sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Confirm Password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </TextView>
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:alpha="0.2"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:id="@+id/cardViewRegister"
+                    android:layout_marginTop="5sp"
+                    app:cardBackgroundColor="@color/pal4"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="10sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <EditText
-                        android:layout_weight="1"
-                        android:inputType="textPassword"
-                        android:id="@+id/txtConfirmPassword"
-                        android:background="@null"
-                        android:fontFamily="@font/cabin"
-                        android:hint="Confirm your password..."
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    </EditText>
-
                     <TextView
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/tvConfirmShowHide"
+                        android:layout_marginStart="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginBottom="15sp"
+                        android:layout_gravity="center"
                         android:fontFamily="@font/cabin"
                         android:textSize="15sp"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textStyle="bold"
-                        android:text="SHOW"
+                        android:text="REGISTER"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
                     </TextView>
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
 
-    <LinearLayout
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <CheckBox
-
-            android:id="@+id/cbTPP"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </CheckBox>
-        <TextView
-            android:id="@+id/tvTPP"
-            android:text="Terms and Privacy Policy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </TextView>
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:alpha="0.2"
-        android:clickable="false"
-        android:focusable="false"
-        android:foreground="?attr/selectableItemBackground"
-        android:id="@+id/cardViewRegister"
-        android:layout_marginTop="5sp"
-        app:cardBackgroundColor="@color/pal4"
-        app:cardCornerRadius="10dp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
-        android:layout_marginBottom="10sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_marginStart="15sp"
-            android:layout_marginEnd="15sp"
-            android:layout_marginTop="15sp"
-            android:layout_marginBottom="15sp"
-            android:layout_gravity="center"
-            android:fontFamily="@font/cabin"
-            android:textSize="15sp"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:text="REGISTER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </TextView>
-    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

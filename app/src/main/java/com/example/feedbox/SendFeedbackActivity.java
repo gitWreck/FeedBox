@@ -170,7 +170,7 @@ public class SendFeedbackActivity extends AppCompatActivity{
         } else {
             tvDescription1.setText("We're really sorry for your bad experience!");
             tvDescription2.setText("In which category do you have bad experience?");
-            tvDescription3.setText("Specify your reason in one sentence");
+            tvDescription3.setText("State your other reason here");
             imgFeedback.setImageTintList(getColorStateList(R.color.alizarin));
             imgFeedback.setRotation(180.0f);
         }
@@ -228,8 +228,8 @@ public class SendFeedbackActivity extends AppCompatActivity{
                             public void onResponse(String response) {
                                 EndProgLoad();
                                 Toast.makeText(SendFeedbackActivity.this, "Feedback sent successfully...", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-//                                finish();
+//                                dialog.dismiss();
+                                finish();
                             }
                         }, new com.android.volley.Response.ErrorListener() {
                             @Override

@@ -16,7 +16,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="HELLO AGAIN!"
+        android:text="HELLO!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -28,7 +28,7 @@
         android:textSize="15sp"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:text="Hello! Welcome to BULSU Feedbox App"
+        android:text="Welcome to BULSU Feedbox App"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 

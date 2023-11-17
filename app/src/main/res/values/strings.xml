@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -6,6 +7,125 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/oct2</item>
     </style>
+    
+    <string name="tppTitle">
+        Terms and Conditions for Feedbox: An Android-based Application for Managing Stakeholders’ Feedback of Bulacan State University Bustos Campus
+    </string>
+
+    <string name="tppEffectDate">
+        Effective Date:
+    </string>
+
+    <string name="Date">
+         November 23, 2023
+    </string>
+
+    <string name="tppPleaseRead">
+        Please read these Terms and Conditions ("Terms") carefully before using our Feedbox Application. These Terms apply to all users of the application. By accessing or using the application, you agree to be bound by these Terms. If you do not agree with any part of these Terms, do not use the application.
+    </string>
+
+    <string name="tppOne">
+        1. Use of the Application
+    </string>
+
+    <string name="tppOneOne">
+        1.1 Eligibility
+    </string>
+    <string name="tppOneOneDes">
+        You must be a student, parent, or faculty member of the respective school to use the Feedbox Application. By using the application, you represent and warrant that you meet this eligibility requirement.
+    </string>
+
+    <string name="tppOneTwo">
+        1.2 User Conduct
+    </string>
+    <string name="tppOneTwoDes">
+        You agree to use the application for lawful purposes and in compliance with these Terms. You shall not engage in any activity that may interfere with the functioning of the application or harm its users.
+    </string>
+
+    <string name="tppOneThree">
+        1.3 Account Registration
+    </string>
+    <string name="tppOneThreeDes">
+         To access certain features of the application, you may be required to create an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. Students &amp; Faculty Members are required to use their bulsu email.
+    </string>
+
+    <string name="tppTwo">
+        2. Feedback and Content
+    </string>
+
+    <string name="tppTwoOne">
+        2.1 User Feedback
+    </string>
+    <string name="tppTwoOneDes">
+        The Feedbox Application allows users to provide feedback and comments on various aspects of the school. By submitting feedback or content, you grant us a non-exclusive, worldwide, royalty-free, perpetual, and irrevocable right to use, reproduce, modify, adapt, publish, translate, distribute, and display such feedback or content for any purpose.
+    </string>
+
+    <string name="tppTwoTwo">
+        2.2 Content Guidelines
+    </string>
+    <string name="tppTwoTwoDes">
+        You agree not to submit or share any content that is unlawful, abusive, harassing, defamatory, or otherwise objectionable. We reserve the right to remove any content that violates these guidelines or is deemed inappropriate in our sole discretion.
+    </string>
+
+    <string name="tppThree">
+        3. Intellectual Property
+    </string>
+
+    <string name="tppThreeOne">
+        3.1 Ownership
+    </string>
+    <string name="tppThreeOneDes">
+        The Feedbox Application and its content, including but not limited to text, graphics, logos, and software, are the property of our company or its licensors and are protected by intellectual property laws. You shall not use, reproduce, modify, or distribute any content from the application without our prior written consent.
+    </string>
+
+    <string name="tppFour">
+        4. Disclaimers and Limitation of Liability
+    </string>
+
+    <string name="tppFourOne">
+        4.1 Disclaimer
+    </string>
+    <string name="tppFourOneDes">
+        The Feedbox Application is provided on an "as-is" and "as available" basis. We make no representations or warranties of any kind, express or implied, regarding the application\'s availability, accuracy, reliability, or fitness for a particular purpose.
+    </string>
+
+    <string name="tppFourTwo">
+        4.2 Limitation of Liability
+    </string>
+    <string name="tppFourTwoDes">
+        In no event shall we be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Feedbox Application, including but not limited to loss of data, loss of business, or loss of profits.
+    </string>
+
+    <string name="tppFive">
+        5. Modifications and Termination
+    </string>
+
+    <string name="tppFiveOne">
+        5.1 Modifications
+    </string>
+    <string name="tppFiveOneDes">
+        We reserve the right to modify, suspend, or terminate the Feedbox Application or any part thereof at any time without prior notice.
+    </string>
+
+    <string name="tppFiveTwo">
+        5.2 Termination
+    </string>
+    <string name="tppFiveTwoDes">
+        We may, in our sole discretion, terminate your access to the application if we believe you have violated these Terms or engaged in any unauthorized use of the application.
+    </string>
+
+    <string name="tppSix">
+        6. Contact Us
+    </string>
+
+    <string name="tppSixOne">
+        6.1 If you have any questions, concerns, or inquiries regarding these Terms, please contact us at feedbox@gmail.com
+    </string>
+
+    <string name="tppLastPart">
+        By using our School Feedback Application, you acknowledge that you have read, understood, and agreed to these Terms.
+    </string>
+
 
 
     <string name="app_name">FeedBox</string>

@@ -69,7 +69,7 @@
                     android:id="@+id/txtAY_Add"
                     android:background="@null"
                     android:fontFamily="@font/cabin"
-                    android:hint="Enter year range (e.g. 2023-204)"
+                    android:hint="Enter year range (e.g. 2023-2024)"
                     android:textSize="18sp"
                     android:textColor="@color/black"
                     android:layout_width="match_parent"

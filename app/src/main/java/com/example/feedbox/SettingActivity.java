@@ -235,8 +235,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    void LoadAccount()
-    {
+    void LoadAccount() {
         String url = URLDatabase.URL_HOME;
 
         RequestQueue queue = Volley.newRequestQueue(SettingActivity.this);
