@@ -990,7 +990,7 @@ public class HomeAdminActivity extends AppCompatActivity {
                                         });
                                     }
                                 } catch (Exception e) {
-                                    tvPendingCount.setText(response);
+//                                    tvPendingCount.setText(response);
                                     Toast.makeText(HomeAdminActivity.this, response, Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -1085,7 +1085,7 @@ public class HomeAdminActivity extends AppCompatActivity {
                         }
                     }
                 } catch (Exception e) {
-                    tvPendingCount.setText(response);
+//                    tvPendingCount.setText(response);
                     Toast.makeText(HomeAdminActivity.this, response, Toast.LENGTH_SHORT).show();
                 }
                 spinnerSubCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
