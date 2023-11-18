@@ -116,8 +116,9 @@
                     <ImageView
                         android:layout_marginRight="20dp"
                         android:id="@+id/imgCopy"
+                        android:clickable="true"
                         android:layout_gravity="center"
-                        android:src="@drawable/complaint_icon"
+                        android:src="@drawable/icon_copy"
                         android:layout_width="20dp"
                         android:layout_height="20dp">
 

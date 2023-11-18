@@ -74,9 +74,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
-                                if (jsonObject.getString("user_id").equals("null") || jsonObject.getString("user_id").equals(""))
-                                {
-                                    Toast.makeText(ForgotPasswordActivity.this, "Your email is already existing in the database.", Toast.LENGTH_SHORT).show();
+                                if (jsonObject.getString("user_id").equals("null") || jsonObject.getString("user_id").equals("")) {
+                                    Toast.makeText(ForgotPasswordActivity.this, "This email does not exist in the database.", Toast.LENGTH_SHORT).show();
                                 }
                                 else
                                 {

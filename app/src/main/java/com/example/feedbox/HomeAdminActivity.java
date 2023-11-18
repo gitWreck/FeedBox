@@ -884,6 +884,7 @@ public class HomeAdminActivity extends AppCompatActivity {
                         barChartSWH.getXAxis().setGranularityEnabled(true);
                     }
                 } catch (Exception err) {
+//                    tvPendingCount.setText(response);
                     Toast.makeText(HomeAdminActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

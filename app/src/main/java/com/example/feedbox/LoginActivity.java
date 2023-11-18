@@ -182,7 +182,14 @@ public class LoginActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
-                        }else {
+                        } else if (response.contains("IncorrectPass")) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                ToastMessage(jsonObject.getString("IncorrectPass"));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");

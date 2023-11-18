@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -113,6 +116,25 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
         holder.tvSubDetails.setText(FeedbackAdminHelper.getSubDetails());
         holder.tvReasons.setText(FeedbackAdminHelper.getReasons());
         holder.tvfBID.setText(FeedbackAdminHelper.getFeedBackID());
+
+        holder.copyClipBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                        ClipData data = ClipData.newPlainText("data", String.valueOf(FeedbackAdminHelper.getFeedBackID()));
+                        manager.setPrimaryClip(data);
+
+                        Toast.makeText(context, "Copied: " + FeedbackAdminHelper.getFeedBackID().toString(), Toast.LENGTH_LONG).show();
+                    } else {
+                        manager.setText(FeedbackAdminHelper.getFeedBackID());
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
 
         if(FeedbackAdminHelper.getStatus().equals("Pending"))
         {
@@ -414,6 +436,7 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         CardView cardViewUpdate;
+        ImageView copyClipBoard;
         TextView tvFullName, tvFirstName, tvLastName, tvStatus, tvCategoryName, tvSubCategoryName, tvDescription, tvDatePosted, tvUpdate,
             tvDetails, tvSubDetails, tvReasons, tvReasonsLbl, tvfBID;
         ImageView imgSentiment;
@@ -422,6 +445,7 @@ public class FeedbackAdminAdapter extends RecyclerView.Adapter<FeedbackAdminAdap
 
 //            tvFullName = itemView.findViewById(R.id.tvFullName);
             tvfBID = itemView.findViewById(R.id.tvUID);
+            copyClipBoard = itemView.findViewById(R.id.imgCopy);
 
             tvDetails = itemView.findViewById(R.id.tvDetails);
             tvSubDetails = itemView.findViewById(R.id.tvSubDetails);
