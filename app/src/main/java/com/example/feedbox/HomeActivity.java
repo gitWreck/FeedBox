@@ -82,9 +82,9 @@ public class HomeActivity extends AppCompatActivity {
         cardViewClickHere = findViewById(R.id.cardViewClickHere);
         ImgViewBG = findViewById(R.id.imgViewBG);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ImgViewBG.setRenderEffect(RenderEffect.createBlurEffect(20, 20, Shader.TileMode.MIRROR));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            ImgViewBG.setRenderEffect(RenderEffect.createBlurEffect(20, 20, Shader.TileMode.MIRROR));
+//        }
 
         progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setCancelable(false);

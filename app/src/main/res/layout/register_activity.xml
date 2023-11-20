@@ -480,6 +480,7 @@
 
                     </CheckBox>
                     <TextView
+                        android:textColor="@color/black"
                         android:id="@+id/tvTPP"
                         android:text="Terms and Privacy Policy"
                         android:layout_width="match_parent"
