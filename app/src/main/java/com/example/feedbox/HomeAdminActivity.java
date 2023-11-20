@@ -609,7 +609,8 @@ public class HomeAdminActivity extends AppCompatActivity {
 
                     }
                 } catch (Exception e) {
-                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    tvPendingCount.setText(e.getMessage());
+//                    Toast.makeText(HomeAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
                 LoadCategory();
@@ -620,8 +621,8 @@ public class HomeAdminActivity extends AppCompatActivity {
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
+//                tvPendingCount.setText(error.toString());
                 Toast.makeText(HomeAdminActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -634,7 +635,7 @@ public class HomeAdminActivity extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("ay_range", AY_Range);
+//                params.put("ay_range", AY_Range);
                 return params;
             }
         };
@@ -655,8 +656,7 @@ public class HomeAdminActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    if(!response.equals("[]"))
-                    {
+                    if(!response.equals("[]")) {
                         JSONObject jsonObject = new JSONObject(response);
 
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -774,7 +774,7 @@ public class HomeAdminActivity extends AppCompatActivity {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-    //                    try {
+                        //                    try {
                         JSONObject jsonObjectData = jsonArray.getJSONObject(i);
                         int fbCount = jsonObjectData.getInt("fbCount");
                         String month = jsonObjectData.getString("Month");
