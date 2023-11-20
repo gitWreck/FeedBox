@@ -155,6 +155,8 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setCancelable(false);
 
+        tvLoginAdmin.setVisibility(View.GONE);
+
         cardViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,60 +170,72 @@ public class LoginActivity extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.contains("BlockedMessage")) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                ToastMessage(jsonObject.getString("BlockedMessage"));
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else if (response.contains("InvalidMessage")) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                ToastMessage(jsonObject.getString("InvalidMessage"));
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else if (response.contains("IncorrectPass")) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                ToastMessage(jsonObject.getString("IncorrectPass"));
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
+
+                        if(response.contains("Admin")) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("FeedBox",MODE_PRIVATE);
+
+                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                            myEdit.putString("email", txtEmail.getText().toString());
+                            myEdit.putString("user_level", "0");
+
+                            myEdit.commit();
+
+                            Intent intent= new Intent(LoginActivity.this, HomeAdminActivity.class);
+                            startActivity(intent);
                         } else {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                for(int i = 0; i < jsonArray.length(); i++)
-                                {
-                                    try {
-                                        JSONObject jsonObjectData = jsonArray.getJSONObject(i);
-
-                                        //String floodJanMarch = jsonObjectData.getString("flood_jan_march");
-
-                                        SharedPreferences sharedPreferences = getSharedPreferences("FeedBox",MODE_PRIVATE);
-
-                                        SharedPreferences.Editor myEdit = sharedPreferences.edit();
-
-                                        myEdit.putString("email", txtEmail.getText().toString());
-                                        myEdit.putString("user_level", "1");
-
-                                        myEdit.commit();
-
-                                        Intent intent= new Intent(LoginActivity.this, HomeActivity.class);
-                                        startActivity(intent);
-                                    }
-
-                                    catch (Exception err)
-                                    {
-                                        Toast.makeText(LoginActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
+                            if(response.contains("BlockedMessage")) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    ToastMessage(jsonObject.getString("BlockedMessage"));
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
                                 }
-                            } catch (Exception e) {
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else if (response.contains("InvalidMessage")) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    ToastMessage(jsonObject.getString("InvalidMessage"));
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            } else if (response.contains("IncorrectPass")) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    ToastMessage(jsonObject.getString("IncorrectPass"));
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            } else {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                        try {
+                                            JSONObject jsonObjectData = jsonArray.getJSONObject(i);
+
+                                            //String floodJanMarch = jsonObjectData.getString("flood_jan_march");
+
+                                            SharedPreferences sharedPreferences = getSharedPreferences("FeedBox", MODE_PRIVATE);
+
+                                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                                            myEdit.putString("email", txtEmail.getText().toString());
+                                            myEdit.putString("user_level", "1");
+
+                                            myEdit.commit();
+
+                                            Intent intent= new Intent(LoginActivity.this, HomeActivity.class);
+                                            startActivity(intent);
+                                        } catch (Exception err) {
+                                            Toast.makeText(LoginActivity.this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
+
                         EndProgLoad();
                     }
                 }, new com.android.volley.Response.ErrorListener() {
