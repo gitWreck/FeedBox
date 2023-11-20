@@ -12,7 +12,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -54,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
     String Slide, Email;
     CardView cardViewClickHere;
     Boolean AllowSendFeed = null;
-    ImageView imgViewPicture;
+    ImageView imgViewPicture, ImgViewBG;
 
     ProgressDialog progressDialog;
 
@@ -76,6 +80,11 @@ public class HomeActivity extends AppCompatActivity {
         tvGuideline = findViewById(R.id.tvGuideline);
         tvFullName = findViewById(R.id.tvFullName);
         cardViewClickHere = findViewById(R.id.cardViewClickHere);
+        ImgViewBG = findViewById(R.id.imgViewBG);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ImgViewBG.setRenderEffect(RenderEffect.createBlurEffect(20, 20, Shader.TileMode.MIRROR));
+        }
 
         progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setCancelable(false);
@@ -165,7 +174,7 @@ public class HomeActivity extends AppCompatActivity {
                 dialog.setCancelable(true);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.setContentView(R.layout.guideline_layout);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 Window window = dialog.getWindow();
                 WindowManager.LayoutParams wlp = window.getAttributes();
