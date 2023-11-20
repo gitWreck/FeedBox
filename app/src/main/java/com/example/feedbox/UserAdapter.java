@@ -78,8 +78,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
         context = context2;
     }
     private void EndProgLoad(){
-        if(progressDialog!=null && progressDialog.isShowing())
-        {
+        if(progressDialog!=null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
@@ -135,40 +134,44 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>
                     public void onClick(View view) {
                         progressDialog.setMessage("Sending...");
                         progressDialog.show();
+
                         if(MuteCount < 3) {
                             holder.tvMuteCounter.setText(String.valueOf(++MuteCount));
                         }
-                        Log.d("daw", "onClick: " + MuteCount);
-                        String url = URLDatabase.URL_MUTE_USER;
+//                        Log.d("daw", "onClick: " + MuteCount);
 
-                        RequestQueue queue = Volley.newRequestQueue(context);
+                        if (progressDialog.isShowing()) {
+                            String url = URLDatabase.URL_MUTE_USER;
 
-                        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
-                            }
-                        }, new com.android.volley.Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        }) {
-                            @Override
-                            public String getBodyContentType() {
-                                return "application/x-www-form-urlencoded; charset=UTF-8";
-                            }
+                            RequestQueue queue = Volley.newRequestQueue(context);
 
-                            @Override
-                            protected Map<String, String> getParams()
-                            {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("email", UserHelper.getEmail());
+                            StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }) {
+                                @Override
+                                public String getBodyContentType() {
+                                    return "application/x-www-form-urlencoded; charset=UTF-8";
+                                }
+
+                                @Override
+                                protected Map<String, String> getParams()
+                                {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("email", UserHelper.getEmail());
 //                                params.put("feedback_id", FeedbackAdminHelper.getFeedBackID());
-                                return params;
-                            }
-                        };
-                        queue.add(request);
+                                    return params;
+                                }
+                            };
+                            queue.add(request);
+                        }
                         dialog.dismiss();
                         EndProgLoad();
                     }

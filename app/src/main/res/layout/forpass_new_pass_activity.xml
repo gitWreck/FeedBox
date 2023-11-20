@@ -23,6 +23,20 @@
 
     </TextView>
 
+<!--    <TextView-->
+<!--        android:layout_gravity="left"-->
+<!--        android:fontFamily="@font/baloobhai"-->
+<!--        android:textSize="12sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="New Passsword"-->
+<!--        android:layout_marginBottom="50dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--    </TextView>-->
+
+
     <androidx.cardview.widget.CardView
         app:cardBackgroundColor="@color/pal1"
         app:cardElevation="10dp"

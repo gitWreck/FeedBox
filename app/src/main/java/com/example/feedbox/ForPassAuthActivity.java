@@ -666,8 +666,7 @@ public class ForPassAuthActivity extends AppCompatActivity {
 
     }
 
-    void SendCode()
-    {
+    void SendCode() {
         String url = URLDatabase.URL_SEND_CODE;
 
         RequestQueue queue = Volley.newRequestQueue(ForPassAuthActivity.this);
@@ -701,45 +700,50 @@ public class ForPassAuthActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    void openNewPassActivity()
-    {
-        String url = URLDatabase.URL_REGISTER;
+    void openNewPassActivity() {
+        Intent intent= new Intent(ForPassAuthActivity.this, ForPassNewPassActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("EmailFP", EmailFP);
 
-        RequestQueue queue = Volley.newRequestQueue(ForPassAuthActivity.this);
-
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response)
-            {
-
-                Intent intent= new Intent(ForPassAuthActivity.this, ForPassNewPassActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("EmailFP", EmailFP);
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(ForPassAuthActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", EmailFP);
-                return params;
-            }
-        };
-        queue.add(request);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+//        String url = URLDatabase.URL_REGISTER;
+//
+//        RequestQueue queue = Volley.newRequestQueue(ForPassAuthActivity.this);
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//
+//                Intent intent= new Intent(ForPassAuthActivity.this, ForPassNewPassActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("EmailFP", EmailFP);
+//
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error)
+//            {
+//                Toast.makeText(ForPassAuthActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            public String getBodyContentType() {
+//                return "application/x-www-form-urlencoded; charset=UTF-8";
+//            }
+//
+//            @Override
+//            protected Map<String, String> getParams()
+//            {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("email", EmailFP);
+//                return params;
+//            }
+//        };
+//        queue.add(request);
     }
 }
